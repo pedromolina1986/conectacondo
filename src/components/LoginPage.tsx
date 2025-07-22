@@ -21,19 +21,16 @@ const LoginPage = () => {
     // Integração com API real
     authService.login({
       email: formData.email,
-      password: formData.password
+      senha: formData.password
     })
     .then(() => {
-      // Login bem-sucedido - redireciona para dashboard
+      // Login bem-sucedido - redireciona para dashboard      
       navigate('/dashboard');
     })
     .catch((error) => {
       // Fallback para demonstração - aceita qualquer email/senha válida
-      if (formData.email && formData.password) {
-        navigate('/dashboard');
-      } else {
-        setError(error.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.');
-      }
+      setError(error.response?.data?.message || 'Erro ao fazer login. Verifique suas credenciais.');
+      
       setIsLoading(false);
     });
   };

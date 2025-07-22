@@ -2,7 +2,7 @@ import api from './api';
 
 export interface LoginRequest {
   email: string;
-  password: string;
+  senha: string;
 }
 
 export interface LoginResponse {
@@ -29,13 +29,19 @@ export interface RegisterRequest {
 
 export const authService = {
   async login(credentials: LoginRequest): Promise<LoginResponse> {
-    const response = await api.post('/auth/login', credentials);
-    const { token } = response.data;
     
+    const response = await api.post('/auth/login', credentials);
+    
+    const { token, user } = response.data;    
     if (token) {
       localStorage.setItem('auth_token', token);
+    }    
+    if (!user) {      
+      throw new Error('Usuário não encontrado');  
+    } else {      
+      localStorage.setItem('user', user.email);
     }
-    
+
     return response.data;
   },
 

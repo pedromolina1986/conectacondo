@@ -1,33 +1,34 @@
 import api from './api';
+import { Fornecedor } from './fornecedoresService';
+import { Condominio } from './condominiosService';
 
 export interface Contrato {
-  id: string;
-  number: string;
-  condominiumId: string;
-  condominiumName: string;
-  supplierId: string;
-  supplierName: string;
-  type: 'monthly' | 'quarterly' | 'annual';
-  value: number;
-  startDate: string;
-  endDate: string;
-  status: 'active' | 'pending' | 'expired' | 'cancelled';
-  createdAt: string;
+  id: string,
+  numeroContrato: string;
+  fornecedorId: number;
+  fornecedor: Fornecedor;
+  condominioId: number;
+  condominio: Condominio;
+  dataInicio: string;
+  dataFim: string;
+  status: string;
+  valor: number;
 }
 
-export interface CreateContratoRequest {
-  condominiumId: string;
-  supplierId: string;
-  type: 'monthly' | 'quarterly' | 'annual';
-  value: number;
-  startDate: string;
-  endDate: string;
+export interface CreateContratoRequest {  
+  numeroContrato: string;
+  fornecedorId: number;
+  condominioId: number;  
+  dataInicio: string;
+  dataFim: string;
+  status: string;
+  valor: number;
 }
 
 export const contratosService = {
-  async getAll(page = 1, limit = 10, search = ''): Promise<{ data: Contrato[]; total: number }> {
-    const response = await api.get('/contratos', {
-      params: { page, limit, search }
+  async getAll(page = 1, limit = 10, filtro = ''): Promise<{ data: Contrato[]; total: number }> {
+    const response = await api.get('/contrato', {
+      params: { filtro }
     });
     return response.data;
   },

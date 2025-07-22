@@ -1,49 +1,34 @@
 import React, { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Eye, Calendar, DollarSign } from 'lucide-react';
+import { contratosService, Contrato } from '../../services/contratosService';
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState('');
 
-  const contratos = [
-    {
-      id: 1,
-      numero: 'CT-2024-001',
-      condominio: 'Residencial Vista Verde',
-      fornecedor: 'Padaria do João',
-      tipo: 'Mensal',
-      valor: 'R$ 2.500,00',
-      dataInicio: '01/01/2024',
-      dataFim: '31/12/2024',
-      status: 'Ativo'
-    },
-    {
-      id: 2,
-      numero: 'CT-2024-002',
-      condominio: 'Condomínio Jardim das Flores',
-      fornecedor: 'Limpeza Total',
-      tipo: 'Trimestral',
-      valor: 'R$ 1.800,00',
-      dataInicio: '15/02/2024',
-      dataFim: '15/05/2024',
-      status: 'Ativo'
-    },
-    {
-      id: 3,
-      numero: 'CT-2024-003',
-      condominio: 'Residencial Parque das Árvores',
-      fornecedor: 'Beleza & Estilo',
-      tipo: 'Anual',
-      valor: 'R$ 5.000,00',
-      dataInicio: '01/03/2024',
-      dataFim: '01/03/2025',
-      status: 'Pendente'
-    }
-  ];
+  const [contratos, setContratos] = useState<Contrato[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  React.useEffect(() => {
+      loadContratos();
+    }, []);
+  
+  const loadContratos = async () => {
+      try {
+        setLoading(true);
+        const response = await contratosService.getAll(1, 100, searchTerm);      
+        setContratos(response);
+      } catch (error) {
+        console.error('Erro ao carregar condominios:', error);      
+      } finally {
+        setLoading(false);
+      }
+    };
 
   const filteredContratos = contratos.filter(contrato =>
-    contrato.numero.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contrato.condominio.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    contrato.fornecedor.toLowerCase().includes(searchTerm.toLowerCase())
+    contrato.numeroContrato.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    contrato.condominio.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    contrato.fornecedor.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   return (
@@ -78,7 +63,7 @@ const Contratos = () => {
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between">
               <div className="flex-1">
                 <div className="flex items-center space-x-4 mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">{contrato.numero}</h3>
+                  <h3 className="text-lg font-bold text-gray-900">{contrato.numeroContrato}</h3>
                   <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
                     contrato.status === 'Ativo' 
                       ? 'bg-green-100 text-green-800' 
@@ -91,15 +76,17 @@ const Contratos = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                   <div>
                     <p className="text-sm font-medium text-gray-700">Condomínio</p>
-                    <p className="text-sm text-gray-600">{contrato.condominio}</p>
+                    <p className="text-sm text-gray-600">{contrato.condominio.nome}</p>
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-700">Fornecedor</p>
-                    <p className="text-sm text-gray-600">{contrato.fornecedor}</p>
+                    <p className="text-sm text-gray-600">{contrato.fornecedor.nome}</p>
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-gray-700">Tipo</p>
-                    <p className="text-sm text-gray-600">{contrato.tipo}</p>
+                    <p className="text-sm font-medium text-gray-700">Status</p>
+                    <p className={`text-sm font-semibold ${
+                      contrato.status === 'Ativo' ? 'text-green-600' : 'text-yellow-600'
+                    }`}>{contrato.status}</p>                    
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-700">Valor</p>
@@ -111,13 +98,9 @@ const Contratos = () => {
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span className="text-sm text-gray-600">
-                      {contrato.dataInicio} - {contrato.dataFim}
+                      {new Date(contrato.dataInicio).toLocaleDateString()} - {new Date(contrato.dataFim).toLocaleDateString()}  
                     </span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <DollarSign className="h-4 w-4 text-gray-400" />
-                    <span className="text-sm text-gray-600">{contrato.valor}</span>
-                  </div>
+                  </div>                  
                 </div>
               </div>
 
