@@ -8,7 +8,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <MessageCircle className="h-8 w-8 text-green-600" />
+              <MessageCircle className="h-8 w-8 text-primary" />
               <span className="text-2xl font-bold">Conecta Condo</span>
             </div>
             <p className="text-gray-300 mb-4">
@@ -30,7 +30,7 @@ const Footer = () => {
                     const element = document.getElementById('quem-somos');
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="hover:text-green-400 transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   Quem Somos
                 </button>
@@ -41,7 +41,7 @@ const Footer = () => {
                     const element = document.getElementById('moradores');
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="hover:text-green-400 transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   Para Moradores
                 </button>
@@ -52,7 +52,7 @@ const Footer = () => {
                     const element = document.getElementById('condominios');
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="hover:text-green-400 transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   Para Condomínios
                 </button>
@@ -63,7 +63,7 @@ const Footer = () => {
                     const element = document.getElementById('fornecedores');
                     element?.scrollIntoView({ behavior: 'smooth' });
                   }}
-                  className="hover:text-green-400 transition-colors"
+                  className="hover:text-primary transition-colors"
                 >
                   Para Fornecedores
                 </button>

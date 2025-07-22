@@ -55,12 +55,12 @@ const ForResidents = () => {
           ))}
         </div>
 
-        <div className="mt-16 bg-green-50 rounded-2xl p-8 text-center">
+        <div className="mt-16 bg-orange-50 rounded-2xl p-8 text-center">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">Pronto para começar?</h3>
           <p className="text-gray-700 mb-6">
             Entre no grupo do seu condomínio e descubra as ofertas exclusivas disponíveis.
           </p>
-          <button className="bg-green-600 text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors duration-200">
+          <button className="bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors duration-200">
             Quero Participar
           </button>
         </div>

@@ -10,11 +10,11 @@ const Hero = () => {
   };
 
   return (
-    <section className="bg-gradient-to-br from-green-50 to-blue-50 py-20">
+    <section className="bg-gradient-to-br from-orange-100 to-blue-50 py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-            <span className="text-green-600">Conecta Condo:</span>
+            <span className="text-primary">Conecta Condo:</span>
             <br />
             Peça pelo WhatsApp,
             <br />
@@ -28,7 +28,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <button
               onClick={() => scrollToSection('moradores')}
-              className="bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-green-700 transition-all duration-200 transform hover:scale-105"
+              className="bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-orange-700 transition-all duration-200 transform hover:scale-105"
             >
               Sou Morador
             </button>
@@ -40,7 +40,7 @@ const Hero = () => {
             </button>
             <button
               onClick={() => scrollToSection('fornecedores')}
-              className="bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-orange-700 transition-all duration-200 transform hover:scale-105"
+              className="bg-secondary text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-secondary transition-all duration-200 transform hover:scale-105"
             >
               Sou Fornecedor
             </button>

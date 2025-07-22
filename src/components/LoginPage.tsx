@@ -23,7 +23,7 @@ const LoginPage = () => {
       email: formData.email,
       senha: formData.password
     })
-    .then(() => {
+    .then((res) => {
       // Login bem-sucedido - redireciona para dashboard      
       navigate('/dashboard');
     })
@@ -43,19 +43,19 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-primary to-green-50 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="text-center">
           <button
             onClick={() => window.history.back()}
-            className="inline-flex items-center text-green-600 hover:text-green-700 mb-6"
+            className="inline-flex items-center text-secondary hover:text-primary mb-6"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Voltar
           </button>
           
           <div className="flex items-center justify-center mb-6">
-            <MessageCircle className="h-12 w-12 text-green-600" />
+            <MessageCircle className="h-12 w-12 text-primary" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Conecta Condo
@@ -84,7 +84,7 @@ const LoginPage = () => {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                 placeholder="seu@email.com"
               />
             </div>
@@ -101,7 +101,7 @@ const LoginPage = () => {
                   required
                   value={formData.password}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors pr-12"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors pr-12"
                   placeholder="Sua senha"
                 />
                 <button
@@ -124,7 +124,7 @@ const LoginPage = () => {
                   id="remember-me"
                   name="remember-me"
                   type="checkbox"
-                  className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                  className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
                 />
                 <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
                   Lembrar de mim
@@ -133,7 +133,7 @@ const LoginPage = () => {
 
               <button
                 type="button"
-                className="text-sm text-green-600 hover:text-green-700"
+                className="text-sm text-secondary hover:text-primary"
               >
                 Esqueceu a senha?
               </button>
@@ -144,8 +144,8 @@ const LoginPage = () => {
               disabled={isLoading}
               className={`w-full py-3 px-4 rounded-lg font-semibold transition-colors duration-200 transform hover:scale-105 ${
                 isLoading 
-                  ? 'bg-gray-400 cursor-not-allowed' 
-                  : 'bg-green-600 hover:bg-green-700'
+                  ? 'bg-primary cursor-not-allowed' 
+                  : 'bg-primary hover:bg-secondary'
               } text-white`}
             >
               {isLoading ? 'Entrando...' : 'Entrar'}
@@ -157,7 +157,7 @@ const LoginPage = () => {
               Não tem uma conta?{' '}
               <button
                 onClick={() => window.location.href = '/register'}
-                className="text-green-600 hover:text-green-700 font-semibold"
+                className="text-primary hover:text-secondary font-semibold"
               >
                 Registre-se aqui
               </button>
@@ -169,11 +169,11 @@ const LoginPage = () => {
           <p className="text-sm text-gray-500">
             <strong>Para demonstração:</strong> Use qualquer email e senha para fazer login.<br />
             Ao fazer login, você concorda com nossos{' '}
-            <a href="#" className="text-green-600 hover:text-green-700">
+            <a href="#" className="text-primary hover:text-secondary">
               Termos de Uso
             </a>{' '}
             e{' '}
-            <a href="#" className="text-green-600 hover:text-green-700">
+            <a href="#" className="text-primary hover:text-secondary">
               Política de Privacidade
             </a>
           </p>

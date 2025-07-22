@@ -4,12 +4,12 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#1E40AF',       // custom blue
-        secondary: '#F59E0B',     // amber
+        primary: '#FF6600',       // custom blue
+        secondary: '#2D3C4F',     // amber
         brand: {
           light: '#E0F2FE',
-          DEFAULT: '#0EA5E9',
-          dark: '#0369A1',
+          DEFAULT: '#FF6600',
+          dark: '#2D3C4F',
         },
       },
     },

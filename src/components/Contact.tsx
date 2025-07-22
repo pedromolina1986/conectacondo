@@ -3,7 +3,7 @@ import { MessageCircle, Phone, Mail } from 'lucide-react';
 
 const Contact = () => {
   return (
-    <section id="contato" className="py-20 bg-gradient-to-br from-green-50 to-blue-50">
+    <section id="contato" className="py-20 bg-gradient-to-br from-orange-50 to-blue-50">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-4xl font-bold text-gray-900 mb-6">Entre em Contato</h2>
         <p className="text-xl text-gray-700 mb-12">
@@ -47,7 +47,7 @@ const Contact = () => {
             href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center bg-green-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-green-700 transition-all duration-200 transform hover:scale-105"
+            className="inline-flex items-center bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-secondary transition-all duration-200 transform hover:scale-105"
           >
             <MessageCircle className="h-6 w-6 mr-2" />
             Falar no WhatsApp

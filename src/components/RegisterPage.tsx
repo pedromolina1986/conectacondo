@@ -63,19 +63,19 @@ const RegisterPage = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-primary py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-2xl mx-auto">
         <div className="text-center mb-8">
           <button
             onClick={() => window.history.back()}
-            className="inline-flex items-center text-green-600 hover:text-green-700 mb-6"
+            className="inline-flex items-center text-primary hover:text-secondary mb-6"
           >
             <ArrowLeft className="h-5 w-5 mr-2" />
             Voltar
           </button>
           
           <div className="flex items-center justify-center mb-6">
-            <MessageCircle className="h-12 w-12 text-green-600" />
+            <MessageCircle className="h-12 w-12 text-primary" />
           </div>
           <h2 className="text-3xl font-bold text-gray-900 mb-2">
             Conecta Condo
@@ -130,7 +130,7 @@ const RegisterPage = () => {
                   required
                   value={formData.name}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                   placeholder="Seu nome completo"
                 />
               </div>
@@ -146,7 +146,7 @@ const RegisterPage = () => {
                   required
                   value={formData.phone}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                   placeholder="(11) 99999-9999"
                 />
               </div>
@@ -163,7 +163,7 @@ const RegisterPage = () => {
                 required
                 value={formData.email}
                 onChange={handleInputChange}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                 placeholder="seu@email.com"
               />
             </div>
@@ -182,7 +182,7 @@ const RegisterPage = () => {
                     required
                     value={formData.condominiumName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                     placeholder="Nome do seu condomínio"
                   />
                 </div>
@@ -197,7 +197,7 @@ const RegisterPage = () => {
                     required
                     value={formData.apartment}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                     placeholder="Ex: Bloco A - Apt 101"
                   />
                 </div>
@@ -216,7 +216,7 @@ const RegisterPage = () => {
                   required
                   value={formData.condominiumName}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                   placeholder="Nome do condomínio"
                 />
               </div>
@@ -235,7 +235,7 @@ const RegisterPage = () => {
                     required
                     value={formData.businessName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                     placeholder="Nome da sua empresa"
                   />
                 </div>
@@ -249,7 +249,7 @@ const RegisterPage = () => {
                     required
                     value={formData.businessType}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors"
                   >
                     <option value="">Selecione</option>
                     <option value="alimentacao">Alimentação</option>
@@ -277,7 +277,7 @@ const RegisterPage = () => {
                     required
                     value={formData.password}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors pr-12"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors pr-12"
                     placeholder="Sua senha"
                   />
                   <button
@@ -306,7 +306,7 @@ const RegisterPage = () => {
                     required
                     value={formData.confirmPassword}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-colors pr-12"
+                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-colors pr-12"
                     placeholder="Confirme sua senha"
                   />
                   <button
@@ -330,15 +330,15 @@ const RegisterPage = () => {
                 name="terms"
                 type="checkbox"
                 required
-                className="h-4 w-4 text-green-600 focus:ring-green-500 border-gray-300 rounded"
+                className="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
               />
               <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
                 Concordo com os{' '}
-                <a href="#" className="text-green-600 hover:text-green-700">
+                <a href="#" className="text-primary hover:text-secondary">
                   Termos de Uso
                 </a>{' '}
                 e{' '}
-                <a href="#" className="text-green-600 hover:text-green-700">
+                <a href="#" className="text-primary hover:text-secondary">
                   Política de Privacidade
                 </a>
               </label>
@@ -346,7 +346,7 @@ const RegisterPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors duration-200 transform hover:scale-105"
+              className="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold hover:bg-secondary transition-colors duration-200 transform hover:scale-105"
             >
               Criar Conta
             </button>
@@ -357,7 +357,7 @@ const RegisterPage = () => {
               Já tem uma conta?{' '}
               <button
                 onClick={() => window.location.href = '/login'}
-                className="text-green-600 hover:text-green-700 font-semibold"
+                className="text-primary hover:text-secondary font-semibold"
               >
                 Faça login aqui
               </button>

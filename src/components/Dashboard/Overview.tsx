@@ -47,8 +47,8 @@ const Overview = () => {
           <div className="space-y-4">
             {recentActivity.map((activity, index) => (
               <div key={index} className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                <div className="bg-green-100 p-2 rounded-full">
-                  <MessageCircle className="h-4 w-4 text-green-600" />
+                <div className="bg-orange-100 p-2 rounded-full">
+                  <MessageCircle className="h-4 w-4 text-primary" />
                 </div>
                 <div className="flex-1">
                   <p className="text-gray-900 font-medium">{activity.action}</p>
