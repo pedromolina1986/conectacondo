@@ -49,6 +49,7 @@ export const fornecedoresService = {
   },
 
   async update(id: string, fornecedor: Partial<CreateFornecedorRequest>): Promise<Fornecedor> {
+    fornecedor.Id = id; // Ensure ID is included in the update
     const response = await api.put(`/fornecedor/${id}`, fornecedor);
     return response.data;
   },

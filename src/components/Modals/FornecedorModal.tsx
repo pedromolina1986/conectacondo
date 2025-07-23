@@ -46,7 +46,7 @@ const FornecedorModal: React.FC<FornecedorModalProps> = ({
           nomeContato: fornecedor.nomeContato,
           contato: fornecedor.contato,
           email: fornecedor.email,
-          senha: '', // Não mostrar senha existente
+          senha: fornecedor.senha || '',
           tipo: fornecedor.tipo
         });
       } else {
@@ -77,10 +77,7 @@ const FornecedorModal: React.FC<FornecedorModalProps> = ({
         await fornecedoresService.create(formData);
       } else if (mode === 'edit' && fornecedor) {
         // Não enviar senha vazia na edição
-        const updateData = { ...formData };
-        if (!updateData.senha) {
-          delete updateData.senha;
-        }
+        const updateData = { ...formData };        
         await fornecedoresService.update(fornecedor.id, updateData);
       }
       onSave?.();
@@ -167,8 +164,7 @@ const FornecedorModal: React.FC<FornecedorModalProps> = ({
               name="tipo"
               value={formData.tipo}
               onChange={handleInputChange}
-              disabled={isReadOnly}
-              required
+              disabled={isReadOnly}              
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
             >
               <option value="">Selecione o tipo</option>
@@ -289,7 +285,7 @@ const FornecedorModal: React.FC<FornecedorModalProps> = ({
           {!isReadOnly && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                {mode === 'edit' ? 'Nova Senha (deixe vazio para manter)' : 'Senha'}
+                Senha
               </label>
               <input
                 type="password"
