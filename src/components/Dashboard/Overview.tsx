@@ -1,6 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Building, Truck, FileText, TrendingUp, MessageCircle } from 'lucide-react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import {
+  Users,
+  Building,
+  Truck,
+  FileText,
+  TrendingUp,
+  MessageCircle
+} from 'lucide-react';
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 import { Dashboard, dashboardService } from '../../services/dashboardService';
 
 const Overview = () => {
@@ -71,6 +86,23 @@ const Overview = () => {
     }
   };
 
+  const ChartCard = ({ title, dataKey, color, formatter }: { title: string; dataKey: string; color: string; formatter?: (value: number) => string }) => (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h3 className="text-xl font-bold text-gray-900 mb-4">{title}</h3>
+      <div className="h-64">
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={crescimentoMensal} margin={{ top: 20, right: 20, left: 0, bottom: 0 }}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="dia" />
+            <YAxis tickFormatter={formatter} />
+            <Tooltip formatter={formatter} />
+            <Line type="monotone" dataKey={dataKey} stroke={color} strokeWidth={2} name={title} />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
+    </div>
+  );
+
   return (
     <div className="p-6">
       <div className="mb-8">
@@ -94,8 +126,19 @@ const Overview = () => {
           </div>
         ))}
       </div>
+      {/* Gráfico de Total de Envios */}        
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+        <ChartCard title="Total de Envios" dataKey="TotalEnvios" color="#3b82f6" />
+        <ChartCard title="Total de Pedidos" dataKey="TotalPedidos" color="#10b981" />
+        <ChartCard
+          title="Total Valor de Anúncios (R$)"
+          dataKey="TotalValorAnuncios"
+          color="#f59e0b"
+          formatter={(value) => value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}
+        />
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-1 gap-6 mb-6">
         {/* Recent Activity */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Atividade Recente</h3>
@@ -112,30 +155,8 @@ const Overview = () => {
               </div>
             ))}
           </div>
-        </div>
-
-        {/* Performance Chart */}
-        <div className="bg-white rounded-lg shadow-lg p-6">
-          <h3 className="text-xl font-bold text-gray-900 mb-4">Crescimento Mensal</h3>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart
-                data={crescimentoMensal}
-                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="dia" />
-                <YAxis />
-                <Tooltip />
-                <Legend verticalAlign="top" />
-                <Line type="monotone" dataKey="TotalEnvios" stroke="#3b82f6" name="Envios" strokeWidth={2} />
-                <Line type="monotone" dataKey="TotalPedidos" stroke="#10b981" name="Pedidos" strokeWidth={2} />
-                <Line type="monotone" dataKey="TotalValorAnuncios" stroke="#f59e0b" name="Valor (R$)" strokeWidth={2} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
-      </div>
+        </div>        
+      </div>            
     </div>
   );
 };

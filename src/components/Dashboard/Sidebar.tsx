@@ -7,14 +7,20 @@ interface SidebarProps {
 }
 
 const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => {
-  const menuItems = [
-    { id: 'overview', label: 'Visão Geral', icon: Home },
-    { id: 'moradores', label: 'Moradores', icon: Users },
-    { id: 'condominios', label: 'Condomínios', icon: Building },
-    { id: 'fornecedores', label: 'Fornecedores', icon: Truck },
-    { id: 'contratos', label: 'Contratos', icon: FileText },
-    { id: 'publicacoes', label: 'Publicações', icon: Megaphone }
+  const generealMenuItems = [
+    { id: 'overview', label: 'Visão Geral', icon: Home, role: ['ADMIN'] },
+    { id: 'moradores', label: 'Moradores', icon: Users, role: ['ADMIN'] },
+    { id: 'condominios', label: 'Condomínios', icon: Building, role: ['ADMIN'] },
+    { id: 'fornecedores', label: 'Fornecedores', icon: Truck, role: ['ADMIN'] },
+    { id: 'contratos', label: 'Contratos', icon: FileText, role: ['ADMIN'] },
+    { id: 'publicacoes', label: 'Publicações', icon: Megaphone, role: ['ADMIN','FORNECEDOR'] },
   ];
+
+  // Filtra os itens de menu com base no papel do usuário
+  const menuItems = generealMenuItems.filter(item => {
+    const userRole = localStorage.getItem('user_role'); // Supondo que o papel do usuário esteja armazenado no localStorage
+    return item.role.includes(userRole || '');
+  });
 
   return (
     <div className="bg-secondary text-white w-64 min-h-screen p-4">

@@ -39,7 +39,9 @@ export const authService = {
     if (!user) {      
       throw new Error('Usuário não encontrado');  
     } else {      
+      console.log('Usuário autenticado:', user);
       localStorage.setItem('user', user.email);
+      localStorage.setItem('user_role', user.tipo);
     }
 
     return response.data;
