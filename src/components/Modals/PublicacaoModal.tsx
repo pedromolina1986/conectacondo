@@ -46,26 +46,45 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
       loadContratos();
       
       if (publicacao && (mode === 'edit' || mode === 'view')) {
-        setFormData({
-          contratoId: publicacao.contratoId,
-          fornecedorId: publicacao.fornecedorId,
-          condominioId: publicacao.condominioId,
-          dataPostagem: publicacao.dataPostagem,
-          horaPostagem: publicacao.horaPostagem,
-          descricaoPostagem: publicacao.descricaoPostagem,
-          imagem: publicacao.imagem,
-          preco: publicacao.preco,
-          dataLimitePedido: publicacao.dataLimitePedido,
-          horaLimitePedido: publicacao.horaLimitePedido,
-          dataEntrega: publicacao.dataEntrega.split('T')[0], // Format for input date
-          horaEntrega: publicacao.horaEntrega,
-          linkPagamento: publicacao.linkPagamento,
-          status: publicacao.status
-        });
-        // Set preview URL for existing image
-        if (publicacao.imagem) {
-          setPreviewUrl(`https://api.oconectacondo.com.br/uploads/${publicacao.imagem}`);
-        }
+        
+        const loadImageAsFile = async () => {
+          if (publicacao.imagem) {
+            
+            const imageUrl = `https://api.oconectacondo.com.br/uploads/${publicacao.imagem}`;
+            try {
+              const response = await fetch(imageUrl);
+              const blob = await response.blob();
+
+              // Create File object (you can use original name or a custom one)
+              const file = new File([blob], publicacao.imagem, { type: blob.type });
+
+              // Set form data with File instead of just the name
+              setFormData({
+                contratoId: publicacao.contratoId,
+                fornecedorId: publicacao.fornecedorId,
+                condominioId: publicacao.condominioId,
+                dataPostagem: publicacao.dataPostagem,
+                horaPostagem: publicacao.horaPostagem,
+                descricaoPostagem: publicacao.descricaoPostagem,
+                imagem: file, // 👈 File object here
+                preco: publicacao.preco,
+                dataLimitePedido: publicacao.dataLimitePedido,
+                horaLimitePedido: publicacao.horaLimitePedido,
+                dataEntrega: publicacao.dataEntrega.split('T')[0],
+                horaEntrega: publicacao.horaEntrega,
+                linkPagamento: publicacao.linkPagamento,
+                status: publicacao.status
+              });
+
+              // Set preview URL
+              setPreviewUrl(imageUrl);
+            } catch (error) {
+              console.error("Failed to fetch image from URL", error);
+            }
+          }
+        };
+
+        loadImageAsFile();
       } else {
         // Set default values for new publication
         const today = new Date().toISOString().split('T')[0];
@@ -95,14 +114,14 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
   const loadContratos = async () => {
     try {
       const response = await contratosService.getAll(1, 100);
-      setContratos(response.data || []);
+      setContratos(response || []);
     } catch (error) {
       console.error('Erro ao carregar contratos:', error);
     }
   };
 
   const handleContratoChange = (contratoId: number) => {
-    const contrato = contratos.find(c => c.id === contratoId.toString());
+    const contrato = contratos.find(c => c.id === contratoId);
     if (contrato) {
       setFormData({
         ...formData,
@@ -119,7 +138,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
       setSelectedFile(file);
       setFormData({
         ...formData,
-        imagem: file.name
+        imagem: file
       });
       
       // Create preview URL
@@ -152,8 +171,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
       //   uploadFormData.append('image', selectedFile);
       //   const uploadResponse = await api.post('/upload', uploadFormData);
       //   formData.imagem = uploadResponse.data.filename;
-      // }
-      
+      // }      
       if (mode === 'create') {
         await publicacoesService.create(formData);
       } else if (mode === 'edit' && publicacao) {
@@ -191,6 +209,24 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
   };
 
   const isReadOnly = mode === 'view';
+
+  const getStatusOptions = () => {
+    return(
+      <select
+        name="status"
+        value={formData.status}
+        onChange={handleInputChange}
+        disabled={isReadOnly}
+        required
+        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
+      >
+          <option className='bg-red-100 text-red-800' value={0}>Aguardando Aprovacao</option>
+          <option className='bg-yellow-100 text-yellow-800' value={1}>Aprovado</option>
+          <option className='bg-gray-100 text-gray-800' value={2}>Reprovado</option>
+          <option className='bg-green-100 text-green-800' value={3}>Enviado</option>          
+        </select>        
+    );    
+  };
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} title={getTitle()} size="xl">
@@ -334,17 +370,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Status
             </label>
-            <select
-              name="status"
-              value={formData.status}
-              onChange={handleInputChange}
-              disabled={isReadOnly}
-              required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
-            >
-              <option value={1}>Ativo</option>
-              <option value={0}>Inativo</option>
-            </select>
+            {getStatusOptions()}
           </div>
 
           <div className="md:col-span-2">
@@ -416,7 +442,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
               <input
                 type="text"
                 name="imagem"
-                value={formData.imagem}
+                value={formData.imagem.name}
                 onChange={handleInputChange}
                 disabled={isReadOnly}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
@@ -430,7 +456,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
               Link de Pagamento
             </label>
             <input
-              type="url"
+              type="text"
               name="linkPagamento"
               value={formData.linkPagamento}
               onChange={handleInputChange}

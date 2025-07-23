@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Search, Plus, Edit, Trash2, Eye, Calendar } from 'lucide-react';
-import { publicacoesService, Publicacao } from '../../services/publicacoesService';
+import { Search, Plus, Edit, Trash2, Eye, Calendar, Send } from 'lucide-react';
+import { publicacoesService, Publicacao, CreatePublicacaoRequest } from '../../services/publicacoesService';
 import PublicacaoModal from '../Modals/PublicacaoModal';
 
 const Publicacoes = () => {
@@ -70,6 +70,84 @@ const Publicacoes = () => {
     loadPublicacoes();
   };
 
+  const handleVisualizarAnuncio = (publicacao: Publicacao) => {
+  const htmlContent = `
+    <html>
+      <head>
+        <title>Anúncio - ${publicacao.contrato.numeroContrato}</title>
+        <style>
+          body { font-family: sans-serif; padding: 2rem; background-color: #f9f9f9; }
+          .card { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+          img { max-width: 25%; height: auto; border-radius: 6px; }
+          .info { margin-top: 1rem; }
+          .info p { margin: 0.3rem 0; }
+        </style>
+      </head>
+      <body>
+        <div class="card">
+          <h2>Contrato: ${publicacao.contrato.numeroContrato}</h2>
+          <img src="https://api.oconectacondo.com.br/uploads/${publicacao.imagem}" alt="Imagem" />
+          <div class="info">
+            <p><strong>Fornecedor:</strong> ${publicacao.fornecedor.nome}</p>
+            <p><strong>Condomínio:</strong> ${publicacao.condominio.nome}</p>
+            <p><strong>Data de Postagem:</strong> ${publicacao.dataPostagem} ${publicacao.horaPostagem}</p>
+            <p><strong>Data Limite do Pedido:</strong> ${publicacao.dataLimitePedido} ${publicacao.horaLimitePedido}</p>
+            <p><strong>Data de Entrega:</strong> ${new Date(publicacao.dataEntrega).toLocaleDateString()} ${publicacao.horaEntrega}</p>
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  const newWindow = window.open();
+    if (newWindow) {
+      newWindow.document.write(htmlContent);
+      newWindow.document.close();
+    } else {
+      alert('Popup bloqueado! Permita popups para visualizar o anúncio.');
+    }
+  };
+
+  const handleEnviar = async (id: number) => {
+    console.log('Enviando mensagem para o WhatsApp do fornecedor:', id);
+    try {      
+      await publicacoesService.enviar(id).then(() => {
+        alert('Mensagem enviada com sucesso');  
+      });      
+    } catch (error) {
+      console.error('Erro ao enviar mensagem:', error);
+    }
+  };
+
+  const getStatusBadge = (status: number) => {
+    let statusText = '';
+    let className = 'inline-flex px-2 py-1 text-xs font-semibold rounded-full ';
+
+    switch (status) {
+      case 0:
+        statusText = 'Aguardando Aprovacao';
+        className += 'bg-red-100 text-red-800';
+        break;
+      case 1:
+        statusText = 'Aprovado';
+        className += 'bg-yellow-100 text-yellow-800';
+        break;
+      case 2:
+        statusText = 'Reprovado';
+        className += 'bg-gray-100 text-gray-800';
+        break;
+      case 3:
+        statusText = 'Enviado';
+        className += 'bg-green-100 text-green-800';
+        break;
+      default:
+        statusText = 'Desconhecido';
+        break;
+    }
+
+    return <span className={className}>{statusText}</span>;
+  };
+
   return (
     <div className="p-6">
       <div className="mb-8">
@@ -115,14 +193,8 @@ const Publicacoes = () => {
             <div className="flex-1 flex flex-col justify-between">
               <div>
                 <div className="flex items-center space-x-4 mb-4">
-                  <h3 className="text-lg font-bold text-gray-900">{publicacao.contrato.numeroContrato}</h3>
-                  <span className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
-                    publicacao.status === 1 
-                      ? 'bg-green-100 text-green-800' 
-                      : 'bg-red-100 text-red-800'
-                  }`}>
-                    {publicacao.status}
-                  </span>
+                  <h3 className="text-lg font-bold text-gray-900">{publicacao.contrato.numeroContrato}</h3>                  
+                  {getStatusBadge(publicacao.status)}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
@@ -159,7 +231,7 @@ const Publicacoes = () => {
               {/* Action Buttons */}
               <div className="flex space-x-2 mt-4 lg:mt-6">
                 <button 
-                  onClick={() => handleView(publicacao)}
+                  onClick={() => handleVisualizarAnuncio(publicacao)}
                   className="text-blue-600 hover:text-blue-900 p-2"
                 >
                   <Eye className="h-4 w-4" />
@@ -175,6 +247,12 @@ const Publicacoes = () => {
                   className="text-red-600 hover:text-red-900 p-2"
                 >
                   <Trash2 className="h-4 w-4" />
+                </button>
+                <button                   
+                  onClick={() => handleEnviar(parseInt(publicacao.id))}
+                  className="text-orange-600 hover:text-orange-900 p-2"
+                >
+                  <Send className="h-4 w-4" />
                 </button>
               </div>
 
