@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { moradoresService, Morador } from '../../services/moradoresService';
 import MoradorModal from '../Modals/MoradorModal';
-import { moradoresService, Morador } from '../../services/moradoresService';
-import MoradorModal from '../Modals/MoradorModal';
 
 const Moradores = () => {
   const [searchTerm, setSearchTerm] = useState('');
