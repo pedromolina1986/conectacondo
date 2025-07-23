@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import BaseModal from './BaseModal';
 import { Publicacao, CreatePublicacaoRequest, publicacoesService } from '../../services/publicacoesService';
 import { contratosService, Contrato } from '../../services/contratosService';
@@ -37,6 +38,8 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
   const [contratos, setContratos] = useState<Contrato[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [previewUrl, setPreviewUrl] = useState<string>('');
 
   useEffect(() => {
     if (isOpen) {
@@ -59,6 +62,10 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
           linkPagamento: publicacao.linkPagamento,
           status: publicacao.status
         });
+        // Set preview URL for existing image
+        if (publicacao.imagem) {
+          setPreviewUrl(`https://api.oconectacondo.com.br/uploads/${publicacao.imagem}`);
+        }
       } else {
         // Set default values for new publication
         const today = new Date().toISOString().split('T')[0];
@@ -81,6 +88,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
           status: 1
         });
       }
+      setSelectedFile(null);
     }
   }, [isOpen, publicacao, mode]);
 
@@ -105,12 +113,47 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
     }
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSelectedFile(file);
+      setFormData({
+        ...formData,
+        imagem: file.name
+      });
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreviewUrl(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedFile(null);
+    setPreviewUrl('');
+    setFormData({
+      ...formData,
+      imagem: ''
+    });
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
+      // TODO: Implementar upload da imagem para o servidor
+      // if (selectedFile) {
+      //   const uploadFormData = new FormData();
+      //   uploadFormData.append('image', selectedFile);
+      //   const uploadResponse = await api.post('/upload', uploadFormData);
+      //   formData.imagem = uploadResponse.data.filename;
+      // }
+      
       if (mode === 'create') {
         await publicacoesService.create(formData);
       } else if (mode === 'edit' && publicacao) {
@@ -320,22 +363,69 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
             />
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Imagem (nome do arquivo)
+              Imagem
             </label>
-            <input
-              type="text"
-              name="imagem"
-              value={formData.imagem}
-              onChange={handleInputChange}
-              disabled={isReadOnly}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
-              placeholder="exemplo.jpg"
-            />
+            
+            {!isReadOnly && (
+              <div className="mb-4">
+                <div className="flex items-center justify-center w-full">
+                  <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                    <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                      <Upload className="w-8 h-8 mb-4 text-gray-500" />
+                      <p className="mb-2 text-sm text-gray-500">
+                        <span className="font-semibold">Clique para fazer upload</span> ou arraste e solte
+                      </p>
+                      <p className="text-xs text-gray-500">PNG, JPG ou JPEG (MAX. 5MB)</p>
+                    </div>
+                    <input
+                      type="file"
+                      className="hidden"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                    />
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {/* Preview da imagem */}
+            {previewUrl && (
+              <div className="relative mb-4">
+                <img
+                  src={previewUrl}
+                  alt="Preview"
+                  className="w-full h-48 object-cover rounded-lg border"
+                />
+                {!isReadOnly && (
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute top-2 right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+            )}
+
+            {/* Campo de texto para nome do arquivo (backup) */}
+            <div className="flex items-center space-x-2">
+              <ImageIcon className="w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                name="imagem"
+                value={formData.imagem}
+                onChange={handleInputChange}
+                disabled={isReadOnly}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
+                placeholder="Nome do arquivo da imagem"
+              />
+            </div>
           </div>
 
-          <div>
+          <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Link de Pagamento
             </label>
