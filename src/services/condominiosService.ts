@@ -17,8 +17,8 @@ export interface Condominio {
 export interface CreateCondominioRequest {
   nome: string;
   endereco: string;
-  cidade: number;
-  estado: number;
+  cidade: string;
+  estado: string;
   cep: string;
   grupoWhatsApp: string;
   portariaRemota: boolean
@@ -46,6 +46,7 @@ export const condominiosService = {
   },
 
   async update(id: string, condominio: Partial<CreateCondominioRequest>): Promise<Condominio> {
+    condominio.Id = id; //TIRAR NO BACK ESSA VERIFICACAO
     const response = await api.put(`/condominio/${id}`, condominio);
     return response.data;
   },

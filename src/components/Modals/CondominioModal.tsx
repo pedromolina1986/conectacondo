@@ -20,8 +20,8 @@ const CondominioModal: React.FC<CondominioModalProps> = ({
   const [formData, setFormData] = useState<CreateCondominioRequest>({
     nome: '',
     endereco: '',
-    cidade: 0,
-    estado: 0,
+    cidade: '',
+    estado: '',
     cep: '',
     grupoWhatsApp: '',
     portariaRemota: false,
@@ -38,8 +38,8 @@ const CondominioModal: React.FC<CondominioModalProps> = ({
         setFormData({
           nome: condominio.nome,
           endereco: condominio.endereco,
-          cidade: parseInt(condominio.cidade) || 0,
-          estado: parseInt(condominio.estado) || 0,
+          cidade: condominio.cidade,
+          estado: condominio.estado,
           cep: condominio.cep,
           grupoWhatsApp: condominio.grupoWhatsApp,
           portariaRemota: condominio.portariaRemota,
@@ -51,8 +51,8 @@ const CondominioModal: React.FC<CondominioModalProps> = ({
         setFormData({
           nome: '',
           endereco: '',
-          cidade: 0,
-          estado: 0,
+          cidade: '',
+          estado: '',
           cep: '',
           grupoWhatsApp: '',
           portariaRemota: false,
@@ -226,12 +226,11 @@ const CondominioModal: React.FC<CondominioModalProps> = ({
               Grupo WhatsApp
             </label>
             <input
-              type="url"
+              type="text"
               name="grupoWhatsApp"
               value={formData.grupoWhatsApp}
               onChange={handleInputChange}
-              disabled={isReadOnly}
-              placeholder="https://chat.whatsapp.com/..."
+              disabled={isReadOnly}              
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
             />
           </div>
