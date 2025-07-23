@@ -1,20 +1,75 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Users, Building, Truck, FileText, TrendingUp, MessageCircle } from 'lucide-react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
+import { Dashboard, dashboardService } from '../../services/dashboardService';
 
 const Overview = () => {
-  const stats = [
-    { label: 'Moradores Ativos', value: '1,234', icon: Users, color: 'bg-blue-500' },
-    { label: 'Condomínios', value: '45', icon: Building, color: 'bg-green-500' },
-    { label: 'Fornecedores', value: '89', icon: Truck, color: 'bg-orange-500' },
-    { label: 'Contratos Ativos', value: '156', icon: FileText, color: 'bg-purple-500' }
-  ];
+  const [dashboard, setDashboard] = useState<Dashboard[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [crescimentoMensal, setCrescimentoMensal] = useState([]);
+  const [recentActivity, setRecentactivity] = useState([]);
 
-  const recentActivity = [
-    { action: 'Novo morador cadastrado', time: '2 min atrás', type: 'user' },
-    { action: 'Publicação enviada - Padaria do João', time: '15 min atrás', type: 'post' },
-    { action: 'Contrato renovado - Condomínio Vista Verde', time: '1 hora atrás', type: 'contract' },
-    { action: 'Novo fornecedor aprovado', time: '2 horas atrás', type: 'supplier' }
-  ];
+  const [stats, setStats] = useState([
+    { label: 'Moradores Ativos', value: '—', icon: Users, color: 'bg-blue-500' },
+    { label: 'Condomínios', value: '—', icon: Building, color: 'bg-green-500' },
+    { label: 'Fornecedores', value: '—', icon: Truck, color: 'bg-orange-500' },
+    { label: 'Contratos Ativos', value: '—', icon: FileText, color: 'bg-purple-500' }
+  ]);
+
+  useEffect(() => {
+    loadDashboard();
+  }, []);
+
+  const loadDashboard = async () => {
+    try {
+      setLoading(true);
+      const response = await dashboardService.getAll();
+      setDashboard(response.data || []);
+
+      setStats([
+        { label: 'Moradores Ativos', value: response.moradoresTotal?.toString() || '0', icon: Users, color: 'bg-blue-500' },
+        { label: 'Condomínios', value: response.condominiosTotal?.toString() || '0', icon: Building, color: 'bg-green-500' },
+        { label: 'Fornecedores', value: response.fornecedoresTotal?.toString() || '0', icon: Truck, color: 'bg-orange-500' },
+        { label: 'Contratos Ativos', value: response.contratosAtivos?.toString() || '0', icon: FileText, color: 'bg-purple-500' }
+      ]);
+
+      let recent = [];
+
+      if (response.proximosEnvios) {
+        recent = response.proximosEnvios.map((item: any) => ({
+          action: `Próximo envio de ${item.fornecedor?.nome} para ${item.condominio?.nome}`,
+          time: new Date(item.dataPostagem).toLocaleString()
+        }));
+      }
+
+      if (response.ultimosEnvios) {
+        recent = [
+          ...recent,
+          ...response.ultimosEnvios.map((item: any) => ({
+            action: `Enviado ${item.fornecedor?.nome} para ${item.condominio?.nome}`,
+            time: new Date(item.dataPostagem).toLocaleString()
+          }))
+        ];
+      }
+
+      setRecentactivity(recent);
+
+      if (response.crescimentoMensal) {
+        const chartData = response.crescimentoMensal.map((item: any) => ({
+          dia: `${item.dia}/${item.mes}`,
+          TotalEnvios: item.totalEnvios,
+          TotalPedidos: item.totalPedidos,
+          TotalValorAnuncios: item.totalValorAnuncios
+        }));
+        setCrescimentoMensal(chartData.reverse());
+      }
+
+    } catch (error) {
+      console.error('Erro ao carregar dados do dashboard:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -59,15 +114,25 @@ const Overview = () => {
           </div>
         </div>
 
-        {/* Performance Chart Placeholder */}
+        {/* Performance Chart */}
         <div className="bg-white rounded-lg shadow-lg p-6">
           <h3 className="text-xl font-bold text-gray-900 mb-4">Crescimento Mensal</h3>
-          <div className="flex items-center justify-center h-64 bg-gray-50 rounded-lg">
-            <div className="text-center">
-              <TrendingUp className="h-12 w-12 text-gray-400 mx-auto mb-2" />
-              <p className="text-gray-500">Gráfico de crescimento</p>
-              <p className="text-sm text-gray-400">Em desenvolvimento</p>
-            </div>
+          <div className="h-64">
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart
+                data={crescimentoMensal}
+                margin={{ top: 20, right: 20, left: 0, bottom: 0 }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="dia" />
+                <YAxis />
+                <Tooltip />
+                <Legend verticalAlign="top" />
+                <Line type="monotone" dataKey="TotalEnvios" stroke="#3b82f6" name="Envios" strokeWidth={2} />
+                <Line type="monotone" dataKey="TotalPedidos" stroke="#10b981" name="Pedidos" strokeWidth={2} />
+                <Line type="monotone" dataKey="TotalValorAnuncios" stroke="#f59e0b" name="Valor (R$)" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
           </div>
         </div>
       </div>
