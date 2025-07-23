@@ -32,7 +32,7 @@ export const condominiosService = {
     const response = await api.get('/condominio', {
       params: { filtro }
     });
-    return response.data;
+    return response;
   },
 
   async getById(id: string): Promise<Condominio> {

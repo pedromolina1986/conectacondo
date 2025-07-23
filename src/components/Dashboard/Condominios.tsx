@@ -19,8 +19,8 @@ const Condominios = () => {
   const loadCondominios = async () => {
       try {
         setLoading(true);
-        const response = await condominiosService.getAll(1, 100, searchTerm);      
-        setCondominio(response);
+        const response = await condominiosService.getAll(1, 100, searchTerm);             
+        setCondominio(response.data);
       } catch (error) {
         console.error('Erro ao carregar condominios:', error);      
       } finally {

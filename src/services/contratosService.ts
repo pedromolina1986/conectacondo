@@ -34,26 +34,27 @@ export const contratosService = {
   },
 
   async getById(id: string): Promise<Contrato> {
-    const response = await api.get(`/contratos/${id}`);
+    const response = await api.get(`/contrato/${id}`);
     return response.data;
   },
 
   async create(contrato: CreateContratoRequest): Promise<Contrato> {
-    const response = await api.post('/contratos', contrato);
+    const response = await api.post('/contrato', contrato);
     return response.data;
   },
 
   async update(id: string, contrato: Partial<CreateContratoRequest>): Promise<Contrato> {
-    const response = await api.put(`/contratos/${id}`, contrato);
+    contrato.Id = id; // Ensure ID is included in the update
+    const response = await api.put(`/contrato/${id}`, contrato);
     return response.data;
   },
 
   async delete(id: string): Promise<void> {
-    await api.delete(`/contratos/${id}`);
+    await api.delete(`/contrato/${id}`);
   },
 
   async updateStatus(id: string, status: 'active' | 'pending' | 'expired' | 'cancelled'): Promise<Contrato> {
-    const response = await api.patch(`/contratos/${id}/status`, { status });
+    const response = await api.patch(`/contrato/${id}/status`, { status });
     return response.data;
   }
 };

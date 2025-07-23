@@ -21,7 +21,7 @@ const Fornecedores = () => {
       try {
         setLoading(true);
         const response = await fornecedoresService.getAll(1, 100, searchTerm);      
-        setFornecedores(response);
+        setFornecedores(response.data);
       } catch (error) {
         console.error('Erro ao carregar condominios:', error);      
       } finally {

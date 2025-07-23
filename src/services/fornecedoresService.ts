@@ -31,11 +31,11 @@ export interface CreateFornecedorRequest {
 }
 
 export const fornecedoresService = {
-  async getAll(page = 1, limit = 10, search = ''): Promise<{ data: Fornecedor[]; total: number }> {
+  async getAll(page = 1, limit = 10, filtro = ''): Promise<{ data: Fornecedor[]; total: number }> {
     const response = await api.get('/fornecedor', {
-      params: { page, limit, search }
+      params: { filtro }
     });
-    return response.data;
+    return response;
   },
 
   async getById(id: string): Promise<Fornecedor> {
