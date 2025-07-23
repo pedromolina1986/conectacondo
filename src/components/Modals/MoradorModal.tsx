@@ -19,6 +19,7 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
   onSave
 }) => {
   const [formData, setFormData] = useState<CreateMoradorRequest>({
+    id: '',
     nome: '',
     email: '',
     telefone: '',
@@ -33,7 +34,9 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
     if (isOpen) {
       loadCondominios();
       if (morador && (mode === 'edit' || mode === 'view')) {
+        
         setFormData({
+          id: morador.id,
           nome: morador.nome,
           email: morador.email,
           telefone: morador.telefone,
@@ -42,6 +45,7 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
         });
       } else {
         setFormData({
+          id: '',
           nome: '',
           email: '',
           telefone: '',
@@ -55,7 +59,7 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
   const loadCondominios = async () => {
     try {
       const response = await condominiosService.getAll(1, 100);
-      setCondominios(response.data || []);
+      setCondominios(response || []);
     } catch (error) {
       console.error('Erro ao carregar condomínios:', error);
     }
@@ -67,10 +71,11 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
     setError('');
 
     try {
+      console.log(morador, mode, formData);
       if (mode === 'create') {
         await moradoresService.create(formData);
       } else if (mode === 'edit' && morador) {
-        await moradoresService.update(morador.id, formData);
+        await moradoresService.update(morador.telefone, formData);
       }
       onSave?.();
       onClose();
@@ -133,8 +138,7 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
               name="email"
               value={formData.email}
               onChange={handleInputChange}
-              disabled={isReadOnly}
-              required
+              disabled={isReadOnly}            
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
             />
           </div>

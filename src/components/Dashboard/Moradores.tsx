@@ -19,8 +19,9 @@ const Moradores = () => {
   const loadMoradores = async () => {
     try {
       setLoading(true);
-      const response = await moradoresService.getAll(1, 100, searchTerm);      
-      setMoradores(response.data || []);
+      const response = await moradoresService.getAll(1, 100, searchTerm);    
+      console.log('Moradores carregados:', response);  
+      setMoradores(response || []);
     } catch (error) {
       console.error('Erro ao carregar moradores:', error);
       setError('Erro ao carregar dados. Usando dados de demonstração.');
@@ -86,7 +87,7 @@ const Moradores = () => {
   const handleDelete = async (morador: Morador) => {
     if (window.confirm(`Tem certeza que deseja excluir o morador ${morador.nome}?`)) {
       try {
-        await moradoresService.delete(morador.id);
+        await moradoresService.delete(morador.telefone);
         loadMoradores();
       } catch (error) {
         console.error('Erro ao excluir morador:', error);

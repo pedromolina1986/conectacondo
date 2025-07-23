@@ -12,6 +12,7 @@ export interface Morador {
 }
 
 export interface CreateMoradorRequest {
+  id?: string;
   nome: string;
   email: string;
   telefone: string;
@@ -37,17 +38,13 @@ export const moradoresService = {
     return response.data;
   },
 
-  async update(id: string, morador: Partial<CreateMoradorRequest>): Promise<Morador> {
-    const response = await api.put(`/morador/${id}`, morador);
+  async update(telefone: string, morador: Partial<CreateMoradorRequest>): Promise<Morador> {
+    const response = await api.put(`/morador/${telefone}`, morador);    
     return response.data;
   },
 
-  async delete(id: string): Promise<void> {
-    await api.delete(`/morador/${id}`);
+  async delete(telefone: string): Promise<void> {
+    await api.delete(`/morador/${telefone}` );
   },
 
-  async updateStatus(id: string, status: 'active' | 'inactive'): Promise<Morador> {
-    const response = await api.patch(`/morador/${id}/status`, { status });
-    return response.data;
-  }
 };
