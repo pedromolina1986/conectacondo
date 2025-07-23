@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Eye, Calendar } from 'lucide-react';
 import { publicacoesService, Publicacao } from '../../services/publicacoesService';
+import PublicacaoModal from '../Modals/PublicacaoModal';
 
 const Publicacoes = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [publicacoes, setPublicacoes] = useState<Publicacao[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'view' | 'edit' | 'create'>('view');
+  const [selectedPublicacao, setSelectedPublicacao] = useState<Publicacao | undefined>();
 
   React.useEffect(() => {
     loadPublicacoes();
@@ -32,6 +36,40 @@ const Publicacoes = () => {
     publicacao.dataPostagem.toLowerCase().includes(searchTerm.toLowerCase())    
   );
 
+  const handleView = (publicacao: Publicacao) => {
+    setSelectedPublicacao(publicacao);
+    setModalMode('view');
+    setModalOpen(true);
+  };
+
+  const handleEdit = (publicacao: Publicacao) => {
+    setSelectedPublicacao(publicacao);
+    setModalMode('edit');
+    setModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setSelectedPublicacao(undefined);
+    setModalMode('create');
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (publicacao: Publicacao) => {
+    if (window.confirm('Tem certeza que deseja excluir esta publicação?')) {
+      try {
+        await publicacoesService.delete(publicacao.id);
+        loadPublicacoes();
+      } catch (error) {
+        console.error('Erro ao excluir publicação:', error);
+        alert('Erro ao excluir publicação');
+      }
+    }
+  };
+
+  const handleModalSave = () => {
+    loadPublicacoes();
+  };
+
   return (
     <div className="p-6">
       <div className="mb-8">
@@ -51,7 +89,10 @@ const Publicacoes = () => {
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
-        <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2">
+        <button 
+          onClick={handleCreate}
+          className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2"
+        >
           <Plus className="h-5 w-5" />
           <span>Nova Publicação</span>
         </button>
@@ -117,13 +158,22 @@ const Publicacoes = () => {
 
               {/* Action Buttons */}
               <div className="flex space-x-2 mt-4 lg:mt-6">
-                <button className="text-blue-600 hover:text-blue-900 p-2">
+                <button 
+                  onClick={() => handleView(publicacao)}
+                  className="text-blue-600 hover:text-blue-900 p-2"
+                >
                   <Eye className="h-4 w-4" />
                 </button>
-                <button className="text-green-600 hover:text-green-900 p-2">
+                <button 
+                  onClick={() => handleEdit(publicacao)}
+                  className="text-green-600 hover:text-green-900 p-2"
+                >
                   <Edit className="h-4 w-4" />
                 </button>
-                <button className="text-red-600 hover:text-red-900 p-2">
+                <button 
+                  onClick={() => handleDelete(publicacao)}
+                  className="text-red-600 hover:text-red-900 p-2"
+                >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
@@ -156,6 +206,14 @@ const Publicacoes = () => {
           <p className="text-center text-red-500">{error}</p>
         )}
       </div>
+
+      <PublicacaoModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={modalMode}
+        publicacao={selectedPublicacao}
+        onSave={handleModalSave}
+      />
     </div>
   );
 };

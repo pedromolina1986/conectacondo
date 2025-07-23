@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { moradoresService, Morador } from '../../services/moradoresService';
+import MoradorModal from '../Modals/MoradorModal';
 
 const Moradores = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [moradores, setMoradores] = useState<Morador[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'view' | 'edit' | 'create'>('view');
+  const [selectedMorador, setSelectedMorador] = useState<Morador | undefined>();
     
   React.useEffect(() => {
     loadMoradores();
@@ -40,6 +44,40 @@ const Moradores = () => {
     }, 500);
   };
 
+  const handleView = (morador: Morador) => {
+    setSelectedMorador(morador);
+    setModalMode('view');
+    setModalOpen(true);
+  };
+
+  const handleEdit = (morador: Morador) => {
+    setSelectedMorador(morador);
+    setModalMode('edit');
+    setModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setSelectedMorador(undefined);
+    setModalMode('create');
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (morador: Morador) => {
+    if (window.confirm(`Tem certeza que deseja excluir o morador ${morador.nome}?`)) {
+      try {
+        await moradoresService.delete(morador.id);
+        loadMoradores();
+      } catch (error) {
+        console.error('Erro ao excluir morador:', error);
+        alert('Erro ao excluir morador');
+      }
+    }
+  };
+
+  const handleModalSave = () => {
+    loadMoradores();
+  };
+
   return (
     <div className="p-6">
       <div className="mb-8">
@@ -59,7 +97,10 @@ const Moradores = () => {
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
-        <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2">
+        <button 
+          onClick={handleCreate}
+          className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2"
+        >
           <Plus className="h-5 w-5" />
           <span>Adicionar Morador</span>
         </button>
@@ -119,13 +160,22 @@ const Moradores = () => {
                   </td>                 
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                     <div className="flex space-x-2">
-                      <button className="text-blue-600 hover:text-blue-900">
+                      <button 
+                        onClick={() => handleView(morador)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
                         <Eye className="h-4 w-4" />
                       </button>
-                      <button className="text-green-600 hover:text-green-900">
+                      <button 
+                        onClick={() => handleEdit(morador)}
+                        className="text-green-600 hover:text-green-900"
+                      >
                         <Edit className="h-4 w-4" />
                       </button>
-                      <button className="text-red-600 hover:text-red-900">
+                      <button 
+                        onClick={() => handleDelete(morador)}
+                        className="text-red-600 hover:text-red-900"
+                      >
                         <Trash2 className="h-4 w-4" />
                       </button>
                     </div>
@@ -137,6 +187,14 @@ const Moradores = () => {
           </table>
         </div>
       </div>
+
+      <MoradorModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={modalMode}
+        morador={selectedMorador}
+        onSave={handleModalSave}
+      />
     </div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Eye, Calendar, DollarSign } from 'lucide-react';
 import { contratosService, Contrato } from '../../services/contratosService';
+import ContratoModal from '../Modals/ContratoModal';
 
 const Contratos = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -8,6 +9,9 @@ const Contratos = () => {
   const [contratos, setContratos] = useState<Contrato[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'view' | 'edit' | 'create'>('view');
+  const [selectedContrato, setSelectedContrato] = useState<Contrato | undefined>();
 
   React.useEffect(() => {
       loadContratos();
@@ -31,6 +35,40 @@ const Contratos = () => {
     contrato.fornecedor.nome.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleView = (contrato: Contrato) => {
+    setSelectedContrato(contrato);
+    setModalMode('view');
+    setModalOpen(true);
+  };
+
+  const handleEdit = (contrato: Contrato) => {
+    setSelectedContrato(contrato);
+    setModalMode('edit');
+    setModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setSelectedContrato(undefined);
+    setModalMode('create');
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (contrato: Contrato) => {
+    if (window.confirm(`Tem certeza que deseja excluir o contrato ${contrato.numeroContrato}?`)) {
+      try {
+        await contratosService.delete(contrato.id);
+        loadContratos();
+      } catch (error) {
+        console.error('Erro ao excluir contrato:', error);
+        alert('Erro ao excluir contrato');
+      }
+    }
+  };
+
+  const handleModalSave = () => {
+    loadContratos();
+  };
+
   return (
     <div className="p-6">
       <div className="mb-8">
@@ -50,7 +88,10 @@ const Contratos = () => {
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
-        <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2">
+        <button 
+          onClick={handleCreate}
+          className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2"
+        >
           <Plus className="h-5 w-5" />
           <span>Novo Contrato</span>
         </button>
@@ -105,13 +146,22 @@ const Contratos = () => {
               </div>
 
               <div className="flex space-x-2 mt-4 lg:mt-0">
-                <button className="text-blue-600 hover:text-blue-900 p-2">
+                <button 
+                  onClick={() => handleView(contrato)}
+                  className="text-blue-600 hover:text-blue-900 p-2"
+                >
                   <Eye className="h-4 w-4" />
                 </button>
-                <button className="text-green-600 hover:text-green-900 p-2">
+                <button 
+                  onClick={() => handleEdit(contrato)}
+                  className="text-green-600 hover:text-green-900 p-2"
+                >
                   <Edit className="h-4 w-4" />
                 </button>
-                <button className="text-red-600 hover:text-red-900 p-2">
+                <button 
+                  onClick={() => handleDelete(contrato)}
+                  className="text-red-600 hover:text-red-900 p-2"
+                >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>
@@ -119,6 +169,14 @@ const Contratos = () => {
           </div>
         ))}
       </div>
+
+      <ContratoModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={modalMode}
+        contrato={selectedContrato}
+        onSave={handleModalSave}
+      />
     </div>
   );
 };

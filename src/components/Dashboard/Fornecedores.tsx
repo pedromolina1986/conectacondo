@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Eye, Star } from 'lucide-react';
 import { fornecedoresService, Fornecedor } from '../../services/fornecedoresService';
+import FornecedorModal from '../Modals/FornecedorModal';
 
 const Fornecedores = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [fornecedores, setFornecedores] = useState<Fornecedor[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<'view' | 'edit' | 'create'>('view');
+  const [selectedFornecedor, setSelectedFornecedor] = useState<Fornecedor | undefined>();
 
   
-React.useEffect(() => {
+  React.useEffect(() => {
       loadFornecedores();
     }, []);
   
@@ -37,6 +41,39 @@ React.useEffect(() => {
     fornecedor.estado.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
+  const handleView = (fornecedor: Fornecedor) => {
+    setSelectedFornecedor(fornecedor);
+    setModalMode('view');
+    setModalOpen(true);
+  };
+
+  const handleEdit = (fornecedor: Fornecedor) => {
+    setSelectedFornecedor(fornecedor);
+    setModalMode('edit');
+    setModalOpen(true);
+  };
+
+  const handleCreate = () => {
+    setSelectedFornecedor(undefined);
+    setModalMode('create');
+    setModalOpen(true);
+  };
+
+  const handleDelete = async (fornecedor: Fornecedor) => {
+    if (window.confirm(`Tem certeza que deseja excluir o fornecedor ${fornecedor.nome}?`)) {
+      try {
+        await fornecedoresService.delete(fornecedor.id);
+        loadFornecedores();
+      } catch (error) {
+        console.error('Erro ao excluir fornecedor:', error);
+        alert('Erro ao excluir fornecedor');
+      }
+    }
+  };
+
+  const handleModalSave = () => {
+    loadFornecedores();
+  };
 
   return (
     <div className="p-6">
@@ -57,7 +94,10 @@ React.useEffect(() => {
             className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
-        <button className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2">
+        <button 
+          onClick={handleCreate}
+          className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-secondary transition-colors duration-200 flex items-center space-x-2"
+        >
           <Plus className="h-5 w-5" />
           <span>Adicionar Fornecedor</span>
         </button>
@@ -87,13 +127,22 @@ React.useEffect(() => {
 
             <div className="flex justify-between items-center">
               <div className="flex space-x-2">
-                <button className="text-blue-600 hover:text-blue-900 p-1">
+                <button 
+                  onClick={() => handleView(fornecedor)}
+                  className="text-blue-600 hover:text-blue-900 p-1"
+                >
                   <Eye className="h-4 w-4" />
                 </button>
-                <button className="text-green-600 hover:text-green-900 p-1">
+                <button 
+                  onClick={() => handleEdit(fornecedor)}
+                  className="text-green-600 hover:text-green-900 p-1"
+                >
                   <Edit className="h-4 w-4" />
                 </button>
-                <button className="text-red-600 hover:text-red-900 p-1">
+                <button 
+                  onClick={() => handleDelete(fornecedor)}
+                  className="text-red-600 hover:text-red-900 p-1"
+                >
                   <Trash2 className="h-4 w-4" />
                 </button>
               </div>                            
@@ -101,6 +150,14 @@ React.useEffect(() => {
           </div>
         ))}
       </div>
+
+      <FornecedorModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={modalMode}
+        fornecedor={selectedFornecedor}
+        onSave={handleModalSave}
+      />
     </div>
   );
 };
