@@ -33,7 +33,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
     dataEntrega: '',
     horaEntrega: '',
     linkPagamento: '',
-    status: 1
+    status: 0
   });
   const [contratos, setContratos] = useState<Contrato[]>([]);
   const [loading, setLoading] = useState(false);
@@ -87,33 +87,34 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
         loadImageAsFile();
       } else {
         // Set default values for new publication
-        const today = new Date().toISOString().split('T')[0];
+        const tomorrow = new Date(Date.now() + 86400000).toISOString().split('T')[0];
         const currentTime = new Date().toTimeString().slice(0, 5);
         
         setFormData({
           contratoId: 0,
           fornecedorId: 0,
           condominioId: 0,
-          dataPostagem: today,
+          dataPostagem: tomorrow,
           horaPostagem: currentTime,
           descricaoPostagem: '',
           imagem: '',
           preco: 0,
-          dataLimitePedido: today,
+          dataLimitePedido: tomorrow,
           horaLimitePedido: currentTime,
-          dataEntrega: today,
+          dataEntrega: tomorrow,
           horaEntrega: currentTime,
           linkPagamento: '',
-          status: 1
+          status: 0
         });
       }
       setSelectedFile(null);
+      setPreviewUrl("");
     }
   }, [isOpen, publicacao, mode]);
 
   const loadContratos = async () => {
     try {
-      const response = await contratosService.getAll(1, 100);
+      const response = await contratosService.getAllAbertos();         
       setContratos(response || []);
     } catch (error) {
       console.error('Erro ao carregar contratos:', error);
@@ -209,14 +210,14 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
   };
 
   const isReadOnly = mode === 'view';
-
+  
   const getStatusOptions = () => {
     return(
       <select
         name="status"
         value={formData.status}
         onChange={handleInputChange}
-        disabled={isReadOnly}
+        disabled={isReadOnly || localStorage.getItem('user_role') === 'FORNECEDOR'}
         required
         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
       >
@@ -226,6 +227,12 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
           <option className='bg-green-100 text-green-800' value={3}>Enviado</option>          
         </select>        
     );    
+  };
+
+  const getTomorrowDate = () => {
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    return tomorrow.toISOString().split('T')[0]; // format: "YYYY-MM-DD"
   };
 
   return (
@@ -271,6 +278,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
               disabled={isReadOnly}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
+              min={getTomorrowDate()}
             />
           </div>
 
@@ -284,7 +292,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
               value={formData.horaPostagem}
               onChange={handleInputChange}
               disabled={isReadOnly}
-              required
+              required              
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
             />
           </div>
@@ -300,7 +308,8 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
               onChange={handleInputChange}
               disabled={isReadOnly}
               required
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
+              className="w-full px-3 py-2 border border-gray-300 rounded-g focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
+              min={getTomorrowDate()}
             />
           </div>
 
@@ -331,6 +340,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
               disabled={isReadOnly}
               required
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
+              min={getTomorrowDate()}
             />
           </div>
 

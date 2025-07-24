@@ -33,6 +33,11 @@ export const contratosService = {
     return response.data;
   },
 
+  async getAllAbertos(): Promise<Contrato[]> {
+    const response = await api.get('/contrato/abertos');
+    return response.data;
+  },
+  
   async getById(id: string): Promise<Contrato> {
     const response = await api.get(`/contrato/${id}`);
     return response.data;

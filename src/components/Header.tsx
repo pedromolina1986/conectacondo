@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, MessageCircle } from 'lucide-react';
+import logo from '../images/ConectaCondo - Logo-01.png';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -17,8 +18,7 @@ const Header = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-2">
-            <MessageCircle className="h-8 w-8 text-primary" />
-            <span className="text-2xl font-bold text-gray-900">Conecta Condo</span>
+            <img src={logo} alt="Logo" className="h-20 w-30" />
           </div>
 
           <nav className="hidden md:flex space-x-8">

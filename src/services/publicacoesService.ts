@@ -45,9 +45,9 @@ export interface CreatePublicacaoRequest {
 export const publicacoesService = {
   async getAll(page = 1, limit = 10, filtro = '', emailFornecedor = localStorage.getItem('user')?.toString()): Promise<{ data: Publicacao[]; total: number }> {    
     const response = await api.get('/envio', {
-      params: { filtro, emailFornecedor }
-    });
-    return response.data;
+      params: { filtro, emailFornecedor, page, limit }
+    });    
+    return response;
   },
 
   async getById(id: string): Promise<Publicacao> {

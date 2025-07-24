@@ -1,5 +1,6 @@
 import React from 'react';
 import { Users, Building, Truck, FileText, Megaphone, Home } from 'lucide-react';
+import logo from '../../images/ConectaCondo - Logo-02.png';
 
 interface SidebarProps {
   activeSection: string;
@@ -25,8 +26,8 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
   return (
     <div className="bg-secondary text-white w-64 min-h-screen p-4">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-primary">Conecta Condo</h2>
-        <p className="text-gray-400 text-sm">Painel Administrativo</p>
+        <img src={logo} alt="Logo" className="h-20 w-30" />
+        <hr className="my-4 border-white-600" />
       </div>
 
       <nav className="space-y-2">

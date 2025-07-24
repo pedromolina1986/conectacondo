@@ -1,5 +1,6 @@
 import React from 'react';
 import { MessageCircle, Heart } from 'lucide-react';
+import logo from '../images/ConectaCondo - Logo-02.png';
 
 const Footer = () => {
   return (
@@ -8,8 +9,7 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-8">
           <div>
             <div className="flex items-center space-x-2 mb-4">
-              <MessageCircle className="h-8 w-8 text-primary" />
-              <span className="text-2xl font-bold">Conecta Condo</span>
+              <img src={logo} alt="Logo" className="h-20 w-30" />
             </div>
             <p className="text-gray-300 mb-4">
               Conectando fornecedores de qualidade a moradores de condomínios através do WhatsApp.
@@ -77,7 +77,7 @@ const Footer = () => {
               Entre em contato conosco pelo WhatsApp para mais informações sobre o Conecta Condo.
             </p>
             <a
-              href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
+              href="https://wa.me/5541999576868?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-700 transition-colors duration-200"

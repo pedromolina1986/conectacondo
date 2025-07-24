@@ -19,8 +19,8 @@ const Publicacoes = () => {
   const loadPublicacoes = async () => {
     try {
       setLoading(true);
-      const response = await publicacoesService.getAll(1, 100, searchTerm);
-      setPublicacoes(response);
+      const response = await publicacoesService.getAll(1, 100, searchTerm);      
+      setPublicacoes(response.data.dados || []);
     } catch (error) {
       console.error('Erro ao carregar publicações:', error);
       setError('Erro ao carregar dados. Usando dados de demonstração.');
@@ -90,8 +90,8 @@ const Publicacoes = () => {
           <div class="info">
             <p><strong>Fornecedor:</strong> ${publicacao.fornecedor.nome}</p>
             <p><strong>Condomínio:</strong> ${publicacao.condominio.nome}</p>
-            <p><strong>Data de Postagem:</strong> ${publicacao.dataPostagem} ${publicacao.horaPostagem}</p>
-            <p><strong>Data Limite do Pedido:</strong> ${publicacao.dataLimitePedido} ${publicacao.horaLimitePedido}</p>
+            <p><strong>Data de Postagem:</strong> ${new Date(publicacao.dataPostagem).toLocaleDateString()} ${publicacao.horaPostagem}</p>
+            <p><strong>Data Limite do Pedido:</strong> ${new Date(publicacao.dataLimitePedido).toLocaleDateString()} ${publicacao.horaLimitePedido}</p>
             <p><strong>Data de Entrega:</strong> ${new Date(publicacao.dataEntrega).toLocaleDateString()} ${publicacao.horaEntrega}</p>
           </div>
         </div>
@@ -209,7 +209,7 @@ const Publicacoes = () => {
                   <div>
                     <p className="text-sm font-medium text-gray-700">Período</p>
                     <p className="text-sm text-gray-600">
-                      {publicacao.dataPostagem} {publicacao.horaPostagem} - {publicacao.dataLimitePedido} {publicacao.horaLimitePedido}
+                      {new Date(publicacao.dataPostagem).toLocaleDateString()} {publicacao.horaPostagem} - {new Date(publicacao.dataLimitePedido).toLocaleDateString()} {publicacao.horaLimitePedido}
                     </p>
                   </div>
                 </div>
@@ -230,33 +230,44 @@ const Publicacoes = () => {
 
               {/* Action Buttons */}
               <div className="flex space-x-2 mt-4 lg:mt-6">
-                <button 
+                <button                   
                   onClick={() => handleVisualizarAnuncio(publicacao)}
                   className="text-blue-600 hover:text-blue-900 p-2"
                 >
                   <Eye className="h-4 w-4" />
                 </button>
-                <button 
-                  onClick={() => handleEdit(publicacao)}
-                  className="text-green-600 hover:text-green-900 p-2"
-                >
-                  <Edit className="h-4 w-4" />
-                </button>
-                <button 
-                  onClick={() => handleDelete(publicacao)}
-                  className="text-red-600 hover:text-red-900 p-2"
-                >
-                  <Trash2 className="h-4 w-4" />
-                </button>
-                <button                   
+                {(publicacao.status === 0 && localStorage.getItem('user_role') !== 'ADMIN') || localStorage.getItem('user_role') == 'ADMIN' ? 
+                  <button 
+                    disabled={publicacao.status !== 0 && localStorage.getItem('user_role') !== 'ADMIN'}
+                    onClick={() => handleEdit(publicacao)}
+                    className="text-green-600 hover:text-green-900 p-2"
+                  >
+                    <Edit className="h-4 w-4" />
+                  </button>
+                  : null
+                }
+                {(publicacao.status === 0 && localStorage.getItem('user_role') !== 'ADMIN') || localStorage.getItem('user_role') == 'ADMIN' ? 
+                  <button                     
+                    onClick={() => handleDelete(publicacao)}
+                    className="text-red-600 hover:text-red-900 p-2"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                  : null
+                }
+                {localStorage.getItem('user_role') === 'ADMIN' ? 
+                  <button                   
+                  
                   onClick={() => handleEnviar(parseInt(publicacao.id))}
                   className="text-orange-600 hover:text-orange-900 p-2"
-                >
-                  <Send className="h-4 w-4" />
-                </button>
+                  >
+                    <Send className="h-4 w-4" />
+                  </button>
+                : null
+                }                
               </div>
 
-              {/* Performance Bar */}
+              {/* Performance Bar 
               <div className="mt-4 pt-4 border-t border-gray-200">
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm font-medium text-gray-700">Taxa de Conversão</span>
@@ -270,7 +281,7 @@ const Publicacoes = () => {
                     style={{ width: `${(10 / publicacao.condominio.unidades) * 100}%` }}
                   ></div>
                 </div>
-              </div>
+              </div>*/}
             </div>
           </div>
         ))}

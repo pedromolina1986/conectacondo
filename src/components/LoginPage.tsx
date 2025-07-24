@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { MessageCircle, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Eye, EyeOff, ArrowLeft } from 'lucide-react';
 import { authService } from '../services/authService';
+import logo from '../images/ConectaCondo - Logo-03.png';
 
 const LoginPage = () => {
   const navigate = useNavigate();
@@ -55,11 +56,8 @@ const LoginPage = () => {
           </button>
           
           <div className="flex items-center justify-center mb-6">
-            <MessageCircle className="h-12 w-12 text-primary" />
-          </div>
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
-            Conecta Condo
-          </h2>
+            <img src={logo} alt="Logo" className="h-20 w-30" />
+          </div>          
           <p className="text-gray-600">
             Entre na sua conta para acessar o painel
           </p>
