@@ -11,6 +11,11 @@ const DashboardHome = () => {
   const [activeSection, setActiveSection] = useState('overview');
 
   const renderContent = () => {
+
+    if (localStorage.getItem("user_role") === "FORNECEDOR"){
+      return <Publicacoes />;
+    } 
+    
     switch (activeSection) {
       case 'overview':
         return <Overview />;
