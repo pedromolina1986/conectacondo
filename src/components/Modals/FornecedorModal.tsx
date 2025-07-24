@@ -35,6 +35,7 @@ const FornecedorModal: React.FC<FornecedorModalProps> = ({
 
   useEffect(() => {
     if (isOpen) {
+      console.log(fornecedor)
       if (fornecedor && (mode === 'edit' || mode === 'view')) {
         setFormData({
           nome: fornecedor.nome,
@@ -108,12 +109,8 @@ const FornecedorModal: React.FC<FornecedorModalProps> = ({
   const isReadOnly = mode === 'view';
 
   const tiposNegocio = [
-    { value: 'alimentacao', label: 'Alimentação' },
-    { value: 'limpeza', label: 'Limpeza' },
-    { value: 'beleza', label: 'Beleza e Estética' },
-    { value: 'manutencao', label: 'Manutenção' },
-    { value: 'delivery', label: 'Delivery' },
-    { value: 'outros', label: 'Outros' }
+    { value: 'produto', label: 'Produto' },
+    { value: 'serviço', label: 'Serviço' },    
   ];
 
   return (

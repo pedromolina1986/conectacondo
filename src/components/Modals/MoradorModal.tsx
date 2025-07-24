@@ -58,8 +58,8 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
 
   const loadCondominios = async () => {
     try {
-      const response = await condominiosService.getAll(1, 100);
-      setCondominios(response || []);
+      const response = await condominiosService.getAll(1, 100);      
+      setCondominios(response.data || []);
     } catch (error) {
       console.error('Erro ao carregar condomínios:', error);
     }
@@ -171,7 +171,7 @@ const MoradorModal: React.FC<MoradorModalProps> = ({
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
             >
               <option value="">Selecione um condomínio</option>
-              {condominios.map((condominio) => (
+              {condominios?.map((condominio) => (
                 <option key={condominio.id} value={condominio.id}>
                   {condominio.nome}
                 </option>
