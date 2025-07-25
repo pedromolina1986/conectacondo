@@ -230,6 +230,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
   };
 
   const getTomorrowDate = () => {
+    if (localStorage.getItem("user_role") == "ADMIN") return null;
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0]; // format: "YYYY-MM-DD"
