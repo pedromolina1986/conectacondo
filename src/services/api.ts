@@ -1,5 +1,5 @@
-//const API_BASE_URL = 'https://api.oconectacondo.com.br/api';
-const API_BASE_URL = 'http://localhost:5005/api';
+const API_BASE_URL = 'https://api.oconectacondo.com.br/api';
+//const API_BASE_URL = 'http://localhost:5005/api';
 
 import axios from 'axios';
 
