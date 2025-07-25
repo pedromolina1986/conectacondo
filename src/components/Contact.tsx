@@ -44,7 +44,7 @@ const Contact = () => {
           </p>
           
           <a
-            href="https://wa.me/5511999999999?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
+            href="https://wa.me/5541999576868?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-secondary transition-all duration-200 transform hover:scale-105"

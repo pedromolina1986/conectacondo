@@ -60,9 +60,16 @@ const ForResidents = () => {
           <p className="text-gray-700 mb-6">
             Entre no grupo do seu condomínio e descubra as ofertas exclusivas disponíveis.
           </p>
-          <button className="bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-green-700 transition-colors duration-200">
-            Quero Participar
-          </button>
+          <a
+            href="https://wa.me/5541999576868?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
+            target="_blank"
+            rel="noopener noreferrer"            
+          >
+            <button className="bg-primary text-white px-8 py-3 rounded-full font-semibold hover:bg-secondary transition-colors duration-200">
+              Quero Participar
+            </button>
+          </a>
+          
         </div>
       </div>
     </section>

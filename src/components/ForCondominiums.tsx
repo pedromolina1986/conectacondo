@@ -87,9 +87,15 @@ const ForCondominiums = () => {
           <p className="mb-6 text-blue-100">
             Entre em contato conosco e descubra como o Conecta Condo pode beneficiar seus moradores.
           </p>
-          <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-200">
-            Cadastrar Condomínio
-          </button>
+          <a
+            href="https://wa.me/5541999576868?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
+            target="_blank"
+            rel="noopener noreferrer"            
+          >
+            <button className="bg-white text-blue-600 px-8 py-3 rounded-full font-semibold hover:bg-blue-50 transition-colors duration-200">
+              Cadastrar Condomínio
+            </button>
+          </a>
         </div>
       </div>
     </section>

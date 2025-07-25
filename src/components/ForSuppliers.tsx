@@ -96,9 +96,15 @@ const ForSuppliers = () => {
           <p className="mb-6 text-orange-100">
             Conecte-se a milhares de moradores em condomínios da sua região.
           </p>
-          <button className="bg-white text-orange-600 px-8 py-3 rounded-full font-semibold hover:bg-orange-50 transition-colors duration-200">
-            Ser Fornecedor
-          </button>
+          <a
+            href="https://wa.me/5541999576868?text=Ol%C3%A1%2C%20gostaria%20de%20saber%20mais%20sobre%20o%20Conecta%20Condo"
+            target="_blank"
+            rel="noopener noreferrer"            
+          >
+            <button className="bg-white text-orange-600 px-8 py-3 rounded-full font-semibold hover:bg-orange-50 transition-colors duration-200">
+              Ser Fornecedor
+            </button>
+          </a>
         </div>
       </div>
     </section>
