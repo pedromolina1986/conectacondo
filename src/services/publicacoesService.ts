@@ -57,7 +57,7 @@ export const publicacoesService = {
 
   async create(publicacao: CreatePublicacaoRequest): Promise<Publicacao> {
     const formData = new FormData();
-    console.log('Updating publication with ID:', 'and data:', publicacao);
+    
     //verify if the image is a File object
     if (publicacao.imagem instanceof File) {
 

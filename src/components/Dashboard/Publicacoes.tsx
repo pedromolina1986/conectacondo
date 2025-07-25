@@ -7,7 +7,8 @@ import {
   Eye,
   Calendar,
   Send,
-  FileText
+  FileText,
+  DollarSignIcon
 } from 'lucide-react';
 import {
   publicacoesService,
@@ -236,8 +237,8 @@ const Publicacoes = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-700">Período</p>
-                    <p className="text-sm text-gray-600">
-                      {new Date(publicacao.dataPostagem).toLocaleDateString()} {publicacao.horaPostagem} - {new Date(publicacao.dataLimitePedido).toLocaleDateString()} {publicacao.horaLimitePedido}
+                    <p className="text-sm text-gray-600">                      
+                      {new Date(publicacao.dataPostagem + 'T00:00:00').toLocaleDateString()} {publicacao.horaPostagem} - {new Date(publicacao.dataLimitePedido + 'T00:00:00').toLocaleDateString()} {publicacao.horaLimitePedido}
                     </p>
                   </div>
                 </div>
@@ -251,6 +252,12 @@ const Publicacoes = () => {
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span className="text-sm text-gray-600">
                       Entrega em {new Date(publicacao.dataEntrega).toLocaleDateString()} {publicacao.horaEntrega}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">                    
+                    <span className="text-sm text-gray-600">
+                      {publicacao.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} x {publicacao.contadorPedidos} 
+                       <b>{" (" + (publicacao.preco * publicacao.contadorPedidos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ")"}</b>                      
                     </span>
                   </div>
                 </div>

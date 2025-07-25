@@ -3,6 +3,7 @@ import { Upload, X, Image as ImageIcon } from 'lucide-react';
 import BaseModal from './BaseModal';
 import { Publicacao, CreatePublicacaoRequest, publicacoesService } from '../../services/publicacoesService';
 import { contratosService, Contrato } from '../../services/contratosService';
+import { NumericFormat } from 'react-number-format';
 
 interface PublicacaoModalProps {
   isOpen: boolean;
@@ -173,6 +174,7 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
       //   const uploadResponse = await api.post('/upload', uploadFormData);
       //   formData.imagem = uploadResponse.data.filename;
       // }      
+      //formData.preco = formData.preco/100      
       if (mode === 'create') {
         await publicacoesService.create(formData);
       } else if (mode === 'edit' && publicacao) {
@@ -235,6 +237,13 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow.toISOString().split('T')[0]; // format: "YYYY-MM-DD"
   };
+
+  const formatarPreco = (valor: string): string => {
+    const cleaned = valor.replace(/\D/g, '');
+    const float = parseFloat(cleaned) / 100;
+    return float.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+  };
+
 
   return (
     <BaseModal isOpen={isOpen} onClose={onClose} title={getTitle()} size="xl">
@@ -364,15 +373,21 @@ const PublicacaoModal: React.FC<PublicacaoModalProps> = ({
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Preço (R$)
             </label>
-            <input
-              type="number"
+            <NumericFormat
               name="preco"
               value={formData.preco}
-              onChange={handleInputChange}
+              thousandSeparator="."
+              decimalSeparator=","
+              prefix="R$ "
+              allowNegative={false}
+              fixedDecimalScale
+              decimalScale={2}
+              onValueChange={(values) => {
+                const { floatValue } = values;
+                setFormData({ ...formData, preco: floatValue || 0 });
+              }}
               disabled={isReadOnly}
               required
-              step="0.01"
-              min="0"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent disabled:bg-gray-100"
             />
           </div>
