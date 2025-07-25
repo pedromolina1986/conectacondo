@@ -284,6 +284,21 @@ const Publicacoes = () => {
                   <FileText className="h-4 w-4" />
                 </button>
               </div>
+              {/* Performance Bar*/}
+              <div className="mt-4 pt-4 border-t border-gray-200">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm font-medium text-gray-700">Taxa de Conversão</span>
+                  <span className="text-sm text-gray-600">
+                    {((publicacao.contadorPedidos / publicacao.condominio.unidades) * 100).toFixed(1)}% ({publicacao.contadorPedidos} / {publicacao.condominio.unidades})
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div 
+                    className="bg-green-600 h-2 rounded-full" 
+                    style={{ width: `${(publicacao.contadorPedidos / publicacao.condominio.unidades) * 100}%` }}
+                  ></div>
+                </div>
+              </div>              
             </div>
           </div>
         ))}
