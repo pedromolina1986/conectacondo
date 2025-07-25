@@ -1,5 +1,12 @@
 import React from 'react';
-import { Users, Building, Truck, FileText, Megaphone, Home } from 'lucide-react';
+import {
+  Users,
+  Building,
+  Truck,
+  FileText,
+  Megaphone,
+  Home,
+} from 'lucide-react';
 import logo from '../../images/ConectaCondo - Logo-02.png';
 
 interface SidebarProps {
@@ -14,19 +21,18 @@ const Sidebar: React.FC<SidebarProps> = ({ activeSection, onSectionChange }) => 
     { id: 'condominios', label: 'Condomínios', icon: Building, role: ['ADMIN'] },
     { id: 'fornecedores', label: 'Fornecedores', icon: Truck, role: ['ADMIN'] },
     { id: 'contratos', label: 'Contratos', icon: FileText, role: ['ADMIN'] },
-    { id: 'publicacoes', label: 'Publicações', icon: Megaphone, role: ['ADMIN','FORNECEDOR'] },
+    { id: 'publicacoes', label: 'Publicações', icon: Megaphone, role: ['ADMIN', 'FORNECEDOR'] },
   ];
 
-  // Filtra os itens de menu com base no papel do usuário
   const menuItems = generealMenuItems.filter(item => {
-    const userRole = localStorage.getItem('user_role'); // Supondo que o papel do usuário esteja armazenado no localStorage
+    const userRole = localStorage.getItem('user_role');
     return item.role.includes(userRole || '');
   });
 
   return (
-    <div className="bg-secondary text-white w-64 min-h-screen p-4">
+    <div className="hidden md:flex flex-col w-64 min-h-screen bg-secondary text-white p-4">
       <div className="mb-8">
-        <img src={logo} alt="Logo" className="h-20 w-30" />
+        <img src={logo} alt="Logo" className="h-20 w-auto" />
         <hr className="my-4 border-white-600" />
       </div>
 
