@@ -53,7 +53,7 @@ const Overview = () => {
       if (response.proximosEnvios) {
         recent = response.proximosEnvios.map((item: any) => ({
           action: `Próximo envio de ${item.fornecedor?.nome} para ${item.condominio?.nome}`,
-          time: new Date(item.dataPostagem).toLocaleString()
+          time: new Date(item.dataPostagem + "T" + item.horaPostagem + ":00").toLocaleString()
         }));
       }
 
@@ -62,7 +62,7 @@ const Overview = () => {
           ...recent,
           ...response.ultimosEnvios.map((item: any) => ({
             action: `Enviado ${item.fornecedor?.nome} para ${item.condominio?.nome}`,
-            time: new Date(item.dataPostagem).toLocaleString()
+            time: new Date(item.dataPostagem + "T" + item.horaPostagem + ":00").toLocaleString()
           }))
         ];
       }

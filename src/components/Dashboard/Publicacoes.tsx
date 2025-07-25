@@ -251,15 +251,15 @@ const Publicacoes = () => {
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span className="text-sm text-gray-600">
+                      Anunciar em {new Date(publicacao.dataPostagem).toLocaleDateString()} {publicacao.horaEntrega}
+                    </span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Calendar className="h-4 w-4 text-gray-400" />
+                    <span className="text-sm text-gray-600">
                       Entrega em {new Date(publicacao.dataEntrega).toLocaleDateString()} {publicacao.horaEntrega}
                     </span>
-                  </div>
-                  <div className="flex items-center space-x-2">                    
-                    <span className="text-sm text-gray-600">
-                      {publicacao.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} x {publicacao.contadorPedidos} 
-                       <b>{" (" + (publicacao.preco * publicacao.contadorPedidos).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + ")"}</b>                      
-                    </span>
-                  </div>
+                  </div>                  
                 </div>
               </div>
 

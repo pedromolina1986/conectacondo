@@ -84,7 +84,7 @@ export const publicacoesService = {
     return response.data;
   },
 
-  async update(id: string, publicacao: Partial<CreatePublicacaoRequest>): Promise<Publicacao> {
+  async update(id: string, publicacao: Partial<CreatePublicacaoRequest>): Promise<Publicacao> {    
     console.log('Updating publication with ID:', id, 'and data:', publicacao);
     const formData = new FormData();
 
@@ -106,6 +106,7 @@ export const publicacoesService = {
       }
     }
 
+    
     const response = await api.put(`/envio/${id}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
