@@ -104,7 +104,12 @@ const Publicacoes = () => {
             <img src="https://api.oconectacondo.com.br/uploads/${publicacao.imagem}" alt="Imagem" />
             <div class="info">
               <p><strong>Fornecedor:</strong> ${publicacao.fornecedor.nome}</p>
-              <p><strong>Condomínio:</strong> ${publicacao.condominio.nome}</p>
+              <p><strong>Preço:</strong> R$ ${publicacao.preco}</p>
+              <br>              
+              <p>${publicacao.descricaoPostagem}</p>              
+              <br>
+              <p>${publicacao.linkPagamento == "" || publicacao.linkPagamento == null ? "" : publicacao.linkPagamento }</p>
+              <p>${publicacao.linkPagamento == "" || publicacao.linkPagamento == null ? "" : "<br>" }</p>
               <p><strong>Data de Postagem:</strong> ${new Date(publicacao.dataPostagem).toLocaleDateString()} ${publicacao.horaPostagem}</p>
               <p><strong>Data Limite do Pedido:</strong> ${new Date(publicacao.dataLimitePedido).toLocaleDateString()} ${publicacao.horaLimitePedido}</p>
               <p><strong>Data de Entrega:</strong> ${new Date(publicacao.dataEntrega).toLocaleDateString()} ${publicacao.horaEntrega}</p>
@@ -251,13 +256,13 @@ const Publicacoes = () => {
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span className="text-sm text-gray-600">
-                      Anunciar em {new Date(publicacao.dataPostagem).toLocaleDateString()} {publicacao.horaEntrega}
+                      Anunciar em {new Date(publicacao.dataPostagem+ 'T00:00:00').toLocaleDateString()} {publicacao.horaEntrega}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span className="text-sm text-gray-600">
-                      Entrega em {new Date(publicacao.dataEntrega).toLocaleDateString()} {publicacao.horaEntrega}
+                      Entrega em {new Date(publicacao.dataEntrega+ 'T00:00:00').toLocaleDateString()} {publicacao.horaEntrega}
                     </span>
                   </div>                  
                 </div>
