@@ -86,38 +86,83 @@ const Publicacoes = () => {
   };
 
   const handleVisualizarAnuncio = (publicacao: Publicacao) => {
+    const descricaoFormatada = publicacao.descricaoPostagem || "";
+
     const htmlContent = `
       <html>
         <head>
           <title>Anúncio - ${publicacao.contrato.numeroContrato}</title>
           <style>
-            body { font-family: sans-serif; padding: 2rem; background-color: #f9f9f9; }
-            .card { background: white; padding: 1rem; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
-            img { max-width: 25%; height: auto; border-radius: 6px; }
-            .info { margin-top: 1rem; }
-            .info p { margin: 0.3rem 0; }
+            body {
+              margin: 0;
+              padding: 0;
+              background-color: #e5ddd5;
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              display: flex;
+              justify-content: center;
+              align-items: flex-start;
+              min-height: 100vh;
+            }
+            .phone {
+              background-color: #fff;
+              width: 360px;
+              height: auto;
+              border-radius: 10px;
+              box-shadow: 0 0 10px rgba(0,0,0,0.3);
+              margin: 2rem 0;
+              overflow: hidden;
+            }
+            .header {
+              background-color: #075e54;
+              color: white;
+              padding: 10px 15px;
+              font-weight: bold;
+            }
+            .chat {
+              background-color: #e5ddd5;
+              padding: 10px;
+            }
+            .bubble {
+              background-color: #dcf8c6;
+              border-radius: 8px;
+              padding: 10px 15px;
+              margin: 10px 0;
+              max-width: 80%;
+              word-wrap: break-word;
+              white-space: pre-wrap;
+              font-size: 14px;
+              line-height: 1.5;
+            }
+            .bubble img {
+              max-width: 100%;
+              border-radius: 6px;
+              margin-top: 10px;
+            }
+            .meta {
+              font-size: 11px;
+              text-align: right;
+              margin-top: 5px;
+              color: #999;
+            }
           </style>
         </head>
         <body>
-          <div class="card">
-            <h2>Contrato: ${publicacao.contrato.numeroContrato}</h2>
-            <img src="https://api.oconectacondo.com.br/uploads/${publicacao.imagem}" alt="Imagem" />
-            <div class="info">
-              <p><strong>Fornecedor:</strong> ${publicacao.fornecedor.nome}</p>
-              <p><strong>Preço:</strong> R$ ${publicacao.preco}</p>
-              <br>              
-              <p>${publicacao.descricaoPostagem}</p>              
+          <div class="phone">
+            <div class="header">Fornecedor: ${publicacao.fornecedor.nome}</div>
+            <div class="chat">
+              <div class="bubble">
+              ${publicacao.imagem ? `<img src="https://api.oconectacondo.com.br/uploads/${publicacao.imagem}" alt="Imagem" />` : ''}
               <br>
-              <p>${publicacao.linkPagamento == "" || publicacao.linkPagamento == null ? "" : publicacao.linkPagamento }</p>
-              <p>${publicacao.linkPagamento == "" || publicacao.linkPagamento == null ? "" : "<br>" }</p>
-              <p><strong>Data de Postagem:</strong> ${new Date(publicacao.dataPostagem + 'T' + publicacao.horaPostagem).toLocaleDateString()} ${publicacao.horaPostagem}</p>
-              <p><strong>Data Limite do Pedido:</strong> ${new Date(publicacao.dataLimitePedido + 'T' + publicacao.horaLimitePedido).toLocaleDateString()} ${publicacao.horaLimitePedido}</p>
-              <p><strong>Data de Entrega:</strong> ${new Date(publicacao.dataEntrega + 'T' + publicacao.horaEntrega).toLocaleDateString()} ${publicacao.horaEntrega}</p>
+              ${descricaoFormatada.replace(/</g, '&lt;').replace(/>/g, '&gt;')}      
+
+              <div class="meta">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+              </div>
             </div>
           </div>
         </body>
       </html>
-    `;
+      `;
+
 
     const newWindow = window.open();
     if (newWindow) {
@@ -242,7 +287,7 @@ const Publicacoes = () => {
                   </div>
                   <div>
                     <p className="text-sm font-medium text-gray-700">Período</p>
-                    <p className="text-sm text-gray-600">                      
+                    <p className="text-sm text-gray-600">
                       {new Date(publicacao.dataPostagem + 'T00:00:00').toLocaleDateString()} {publicacao.horaPostagem} - {new Date(publicacao.dataLimitePedido + 'T00:00:00').toLocaleDateString()} {publicacao.horaLimitePedido}
                     </p>
                   </div>
@@ -256,15 +301,15 @@ const Publicacoes = () => {
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span className="text-sm text-gray-600">
-                      Anunciar em {new Date(publicacao.dataPostagem+ 'T00:00:00').toLocaleDateString()} {publicacao.horaEntrega}
+                      Anunciar em {new Date(publicacao.dataPostagem + 'T00:00:00').toLocaleDateString()} {publicacao.horaEntrega}
                     </span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <Calendar className="h-4 w-4 text-gray-400" />
                     <span className="text-sm text-gray-600">
-                      Entrega em {new Date(publicacao.dataEntrega+ 'T00:00:00').toLocaleDateString()} {publicacao.horaEntrega}
+                      Entrega em {new Date(publicacao.dataEntrega + 'T00:00:00').toLocaleDateString()} {publicacao.horaEntrega}
                     </span>
-                  </div>                  
+                  </div>
                 </div>
               </div>
 
@@ -273,7 +318,7 @@ const Publicacoes = () => {
                   <Eye className="h-4 w-4" />
                 </button>
                 {(publicacao.status === 0 && localStorage.getItem('user_role') !== 'ADMIN') ||
-                localStorage.getItem('user_role') === 'ADMIN' ? (
+                  localStorage.getItem('user_role') === 'ADMIN' ? (
                   <>
                     <button onClick={() => handleEdit(publicacao)} className="text-green-600 hover:text-green-900 p-2" title="Editar Publicação">
                       <Edit className="h-4 w-4" />
@@ -305,12 +350,12 @@ const Publicacoes = () => {
                   </span>
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div 
-                    className="bg-green-600 h-2 rounded-full" 
+                  <div
+                    className="bg-green-600 h-2 rounded-full"
                     style={{ width: `${(publicacao.contadorPedidos / publicacao.condominio.unidades) * 100}%` }}
                   ></div>
                 </div>
-              </div>              
+              </div>
             </div>
           </div>
         ))}
