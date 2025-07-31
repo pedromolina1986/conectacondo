@@ -110,9 +110,9 @@ const Publicacoes = () => {
               <br>
               <p>${publicacao.linkPagamento == "" || publicacao.linkPagamento == null ? "" : publicacao.linkPagamento }</p>
               <p>${publicacao.linkPagamento == "" || publicacao.linkPagamento == null ? "" : "<br>" }</p>
-              <p><strong>Data de Postagem:</strong> ${new Date(publicacao.dataPostagem).toLocaleDateString()} ${publicacao.horaPostagem}</p>
-              <p><strong>Data Limite do Pedido:</strong> ${new Date(publicacao.dataLimitePedido).toLocaleDateString()} ${publicacao.horaLimitePedido}</p>
-              <p><strong>Data de Entrega:</strong> ${new Date(publicacao.dataEntrega).toLocaleDateString()} ${publicacao.horaEntrega}</p>
+              <p><strong>Data de Postagem:</strong> ${new Date(publicacao.dataPostagem + 'T' + publicacao.horaPostagem).toLocaleDateString()} ${publicacao.horaPostagem}</p>
+              <p><strong>Data Limite do Pedido:</strong> ${new Date(publicacao.dataLimitePedido + 'T' + publicacao.horaLimitePedido).toLocaleDateString()} ${publicacao.horaLimitePedido}</p>
+              <p><strong>Data de Entrega:</strong> ${new Date(publicacao.dataEntrega + 'T' + publicacao.horaEntrega).toLocaleDateString()} ${publicacao.horaEntrega}</p>
             </div>
           </div>
         </body>
