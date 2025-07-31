@@ -1,6 +1,8 @@
 import api from './api';
 import { Fornecedor } from './fornecedoresService';
 import { Condominio } from './condominiosService';
+import { Publicacao } from './publicacoesService';
+
 
 export interface Contrato {
   id: string,
@@ -13,6 +15,7 @@ export interface Contrato {
   dataFim: string;
   status: string;
   valor: number;
+  envios: Array<Publicacao>;
 }
 
 export interface CreateContratoRequest {  
