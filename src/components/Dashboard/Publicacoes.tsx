@@ -172,7 +172,7 @@ const Publicacoes = () => {
                 ${publicacao.linkPagamento ? `<br>Forma de pagamento: ${publicacao.linkPagamento}` : ''}                
                 ${publicacao.fornecedor.tipo == "produto" ? 
                   `
-                    <br><br>Data/Hora limite para pedido: ${new Date(publicacao.dataLimitePedido + "T" + publicacao.horaLimitePedido).toLocaleDateString()} - ${publicacao.horaEntrega}
+                    <br><br>Data/Hora limite para pedido: ${new Date(publicacao.dataLimitePedido + "T" + publicacao.horaLimitePedido).toLocaleDateString()} - ${publicacao.horaLimitePedido}
                     <br>Data/Hora de entrega: ${new Date(publicacao.dataEntrega + "T" + publicacao.horaEntrega).toLocaleDateString()} - ${publicacao.horaEntrega}
                     <br>IMPORTANTE: Fiquem atentos a data/hora de entrega. É responsabilidade do morador receber o produto e respeitar os horários.
                   `
