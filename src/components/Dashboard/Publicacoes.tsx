@@ -128,16 +128,19 @@ const Publicacoes = () => {
               padding: 10px 15px;
               margin: 10px 0;
               max-width: 80%;
-              word-wrap: break-word;
-              white-space: pre-wrap;
+       
               font-size: 14px;
               line-height: 1.5;
-            }
+            }        
             .bubble img {
               max-width: 100%;
               border-radius: 6px;
               margin-top: 10px;
             }
+            .bubble span {
+              word-wrap: break-word;
+              white-space: pre-wrap;
+            }              
             .meta {
               font-size: 11px;
               text-align: right;
@@ -147,15 +150,36 @@ const Publicacoes = () => {
           </style>
         </head>
         <body>
-          <div class="phone">
-            <div class="header">Fornecedor: ${publicacao.fornecedor.nome}</div>
-            <div class="chat">
-              <div class="bubble">
-              ${publicacao.imagem ? `<img src="https://api.oconectacondo.com.br/uploads/${publicacao.imagem}" alt="Imagem" />` : ''}
-              <br>
-              ${descricaoFormatada.replace(/</g, '&lt;').replace(/>/g, '&gt;')}      
-
-              <div class="meta">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+          <div class="phone">            
+            <div class="chat">              
+              <div class="bubble">              
+                ${publicacao.imagem ? `<img src="https://api.oconectacondo.com.br/uploads/${publicacao.imagem}" alt="Imagem" />` : ''}
+                <br>
+                <br>
+                Fornecedor: ${publicacao.fornecedor.nome.trimStart()}
+                <br>
+                Preço: R$${publicacao.preco}
+                <br>
+                <br>
+                <span class="description">           
+                ${descricaoFormatada
+                  .split('\n')
+                  .map(linha => linha.trimStart())
+                  .join('\n')
+                  .replace(/</g, '&lt;')
+                  .replace(/>/g, '&gt;')}
+                </span>
+                ${publicacao.linkPagamento ? `<br>Foram de pagamento: ${publicacao.linkPagamento}` : ''}                
+                ${publicacao.fornecedor.tipo == "produto" ? 
+                  `
+                    <br><br>Data/Hora limite para pedido: ${new Date(publicacao.dataLimitePedido + "T" + publicacao.horaLimitePedido).toLocaleDateString()}
+                    <br>Data/Hora de entrega: ${new Date(publicacao.dataEntrega + "T" + publicacao.horaEntrega).toLocaleDateString()}
+                    <br>IMPORTANTE: Fiquem atentos a data/hora de entrega. É responsabilidade do morador receber o produto e respeitar os horários.
+                  `
+                  :
+                  ''
+                }
+                <div class="meta">${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
               </div>
             </div>
           </div>
