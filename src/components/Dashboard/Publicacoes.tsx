@@ -169,7 +169,7 @@ const Publicacoes = () => {
                   .replace(/</g, '&lt;')
                   .replace(/>/g, '&gt;')}
                 </span>
-                ${publicacao.linkPagamento ? `<br>Foram de pagamento: ${publicacao.linkPagamento}` : ''}                
+                ${publicacao.linkPagamento ? `<br>Forma de pagamento: ${publicacao.linkPagamento}` : ''}                
                 ${publicacao.fornecedor.tipo == "produto" ? 
                   `
                     <br><br>Data/Hora limite para pedido: ${new Date(publicacao.dataLimitePedido + "T" + publicacao.horaLimitePedido).toLocaleDateString()}
